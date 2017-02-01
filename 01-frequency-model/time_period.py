@@ -28,3 +28,4 @@ if __name__ == '__main__':
             max_date = time
 
     print 'from: ' + str(min_date) + ' to: ' + str(max_date)
+    # from: 2016-01-01 00:00:14 to: 2016-12-20 23:59:38.957000
