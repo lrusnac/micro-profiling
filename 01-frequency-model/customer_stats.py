@@ -3,7 +3,7 @@ import csv
 import os
 
 PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns'
+ZIPFILEPATH = 'YouseePlay_stream_data'
 
 csv.field_size_limit(1000000000)
 frequencies = {}

@@ -20,7 +20,6 @@ if __name__ == '__main__':
     invalid_count = 0
     csvfile = get_data_file_pointer()
     for entry in csvfile:
-        # 'VM_GENRE'
         rows_count = rows_count + 1
         if entry['VM_GENRE'] is '':
             invalid_count = invalid_count + 1
