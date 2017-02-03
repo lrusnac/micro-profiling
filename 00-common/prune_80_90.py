@@ -32,6 +32,6 @@ if __name__ == '__main__':
         writer.writerow(fields)
         csvfile = get_data_file_pointer()
 
-        for entry in tqdm(csvfile, total=16000000):
+        for entry in tqdm(csvfile, total=16100000):
             if entry['hashed_ID'] in customers_80_90:
                 writer.writerow(map(lambda field: entry[field], fields))
