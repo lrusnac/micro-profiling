@@ -6,7 +6,7 @@ import csv
 import math
 
 PATH = '../00-common/'
-ZIPFILEPATH = 'YouseePlay_stream_data'
+ZIPFILEPATH = 'no_serier_pruned_columns_10_percent'
 
 csv.field_size_limit(1000000000)
 

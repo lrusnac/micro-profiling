@@ -8,7 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 PATH = '../00-common/'
-ZIPFILEPATH = 'data_pruned_columns_series'
+ZIPFILEPATH = 'no_serier_pruned_columns_10_percent'
 
 csv.field_size_limit(1000000000)
 frequencies = {}
@@ -17,7 +17,7 @@ counters = {}
 
 def get_data_file_pointer():
     with zipfile.ZipFile(PATH + ZIPFILEPATH + '.zip') as zf:
-        r = csv.DictReader(zf.open('YouseePlay_stream_data.csv'), delimiter=';')
+        r = csv.DictReader(zf.open(ZIPFILEPATH+'.csv'), delimiter=';')
         return r
 
 def addEntryGenre(user, genre):
@@ -51,4 +51,3 @@ if __name__ == '__main__':
             f = genres[g]/float(counters[user])
             ph_table[user][g] = (f, -f * math.log(f, 2))
         print user + ' ' + str(sum([v[1] for v in ph_table[user].values()]))
-
