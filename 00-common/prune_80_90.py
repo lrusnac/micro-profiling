@@ -1,6 +1,7 @@
 import zipfile
 import csv
 import os
+from tqdm import tqdm
 
 PATH = '../00-common/'
 ZIPFILEPATH = 'no_serier_pruned_columns'
@@ -23,12 +24,14 @@ if __name__ == '__main__':
         frequencies[entry['hashed_ID']] = frequencies[entry['hashed_ID']] + 1
 
     customers_80_90 = sorted(frequencies, key=frequencies.get, reverse=True)[70000:140000]
+    customers_80_90 = frozenset(customers_80_90)
     fields = [ 'hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID' ]
 
     with open(OUTFILEPATH + '.csv', 'w') as output:
         writer = csv.writer(output, delimiter=';')
         writer.writerow(fields)
         csvfile = get_data_file_pointer()
-        for entry in csvfile:
+
+        for entry in tqdm(csvfile, total=16000000):
             if entry['hashed_ID'] in customers_80_90:
                 writer.writerow(map(lambda field: entry[field], fields))
