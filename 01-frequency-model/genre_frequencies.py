@@ -2,6 +2,10 @@ import zipfile
 import csv
 import os
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 PATH = '../00-common/'
 ZIPFILEPATH = 'no_serier_pruned_columns'
 
@@ -18,7 +22,7 @@ def addEntryGenre(genre, movie):
     if genre not in frequencies:
         frequencies[genre] = {}
 
-    if movie not in frequencies[genre][movie]:
+    if movie not in frequencies[genre]:
         frequencies[genre][movie] = 0
 
     frequencies[genre][movie] = frequencies[genre][movie] + 1
