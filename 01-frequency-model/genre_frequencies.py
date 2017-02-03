@@ -29,13 +29,8 @@ def addEntryGenre(genre, movie):
     counters[genre] = counters[genre] + 1
 
 if __name__ == '__main__':
-    rows_count = 0
-    invalid_count = 0
     csvfile = get_data_file_pointer()
     for entry in csvfile:
-        rows_count = rows_count + 1
-        if entry['VM_GENRE'] is '':
-            invalid_count = invalid_count + 1
         genres = entry['VM_GENRE'].split(',')
         if len(genres) == 0:
             addEntryGenre('Unknown', entry['VM_TITLE'])
