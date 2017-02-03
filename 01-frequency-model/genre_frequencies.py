@@ -38,9 +38,9 @@ if __name__ == '__main__':
         genres = entry['VM_GENRE'].split(',')
         if genres[0] == '':
             addEntryGenre('Unknown', entry['VM_TITLE'])
-
-        for genre in genres:
-            addEntryGenre(genre, entry['VM_TITLE'])
+        else:
+            for genre in genres:
+                addEntryGenre(genre, entry['VM_TITLE'])
 
     for genre, genre_values in frequencies.iteritems():
         for w in sorted(genre_values, key=genre_values.get, reverse=True):
