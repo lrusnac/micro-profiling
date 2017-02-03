@@ -1,6 +1,7 @@
 import zipfile
 import csv
 import os
+import math
 
 import sys
 reload(sys)
@@ -11,6 +12,7 @@ ZIPFILEPATH = 'data_pruned_columns_series'
 
 csv.field_size_limit(1000000000)
 frequencies = {}
+ph_table = {}
 counters = {}
 
 def get_data_file_pointer():
@@ -21,6 +23,7 @@ def get_data_file_pointer():
 def addEntryGenre(user, genre):
     if user not in frequencies:
         frequencies[user] = {}
+        ph_table[user] = {}
 
     if genre not in frequencies[user]:
         frequencies[user][genre] = 0
@@ -46,6 +49,6 @@ if __name__ == '__main__':
     for user, genres in frequencies.iteritems():
         for g in sorted(genres, key=genres.get, reverse=True):
             f = genres[g]/float(counters[user])
-            frequencies[user][g] = f
+            ph_table[user][g] = (f, -f * math.log(f, 2))
+        print user + ' ' + str(sum([v[1] for v in ph_table[user].values()]))
 
-    print counters
