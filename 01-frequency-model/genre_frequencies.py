@@ -36,13 +36,13 @@ if __name__ == '__main__':
     csvfile = get_data_file_pointer()
     for entry in csvfile:
         genres = entry['VM_GENRE'].split(',')
-        if len(genres) == 0:
+        if genres[0] == '':
             addEntryGenre('Unknown', entry['VM_TITLE'])
+        else:
+            for genre in genres:
+                addEntryGenre(genre, entry['VM_TITLE'])
 
-        for genre in genres:
-            addEntryGenre(genre, entry['VM_TITLE'])
-
-    for (genre, genre_values) in frequencies:
+    for genre, genre_values in frequencies.iteritems():
         for w in sorted(genre_values, key=genre_values.get, reverse=True):
             f = genre_values[w]/float(counters[genre])
             frequencies[genre][w] = f
