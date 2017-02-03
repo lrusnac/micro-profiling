@@ -46,3 +46,5 @@ if __name__ == '__main__':
         for w in sorted(genre_values, key=genre_values.get, reverse=True):
             f = genre_values[w]/float(counters[genre])
             frequencies[genre][w] = f
+
+    print counters
