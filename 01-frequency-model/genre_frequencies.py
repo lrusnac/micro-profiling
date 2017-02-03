@@ -36,7 +36,7 @@ if __name__ == '__main__':
     csvfile = get_data_file_pointer()
     for entry in csvfile:
         genres = entry['VM_GENRE'].split(',')
-        if genres == '':
+        if genres[0] == '':
             addEntryGenre('Unknown', entry['VM_TITLE'])
 
         for genre in genres:
