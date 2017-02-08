@@ -7,6 +7,7 @@
 * **10\_percent\_with\_time\_fields\_clean\_genres.csv:**
 	* Top 80% - 90% of users with most transactions
 	* Timestamps have been deserialized into two new fields: **DayOfWeek** and **HourOfDay**
+	* For all movies with no defined genre, a genre "**unknown**" has been added
 	* Genres for adult movies have all been combined into one genre "**adult**"
 
 ### Training and Test sets
