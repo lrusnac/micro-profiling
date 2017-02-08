@@ -7,7 +7,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns'
+ZIPFILEPATH = '10_percent_with_time_fields_clean_genres'
 
 csv.field_size_limit(1000000000)
 frequencies = {}

@@ -8,7 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns_10_percent'
+ZIPFILEPATH = '10_percent_with_time_fields_clean_genres'
 
 csv.field_size_limit(1000000000)
 frequencies = {}
@@ -34,12 +34,11 @@ if __name__ == '__main__':
     csvfile = get_data_file_pointer()
     for entry in csvfile:
         user = entry['hashed_ID']
-        genres = entry['VM_GENRE'].split(',')
-        if genres[0] == '':
+        genres = entry['VM_GENRE']
+        if genres == '':
             addEntryGenre(user, 'Unknown')
         else:
-            for genre in genres:
-                addEntryGenre(user, genre)
+            addEntryGenre(user, genres)
 
         # Increment once for each entry
         if user not in counters:
