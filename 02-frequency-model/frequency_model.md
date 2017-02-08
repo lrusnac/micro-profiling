@@ -16,3 +16,7 @@ Along with each movie we have a probability of that movie appearing in the datas
 * 007 - Spectre 0.00656785901534 0.0476193496851
 
 The second number displayed in this list can be ignored, as it's the calculated entropy for that movie.
+
+We got an entropy of 10.36. [This number and the sample below are
+computed on the 10% of the selected customers]
+
