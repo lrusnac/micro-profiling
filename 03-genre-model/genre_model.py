@@ -71,11 +71,16 @@ if __name__ == '__main__':
             f = genre_values[w]/float(internal_genre_counter[genre])
             genre_movie_ph_table[genre][w] = (f, -f * math.log(f, 2))
 
-    # not right combination of the 2 things
+    # DANGER: WRONG: not right combination of the 2 things
     entropy = 0
+    weird_entropy = 0
     csvfile = get_data_file_pointer()
     for entry in tqdm(csvfile, total=2576791):
         p = user_genre_ph_table[entry['hashed_ID']][entry['VM_GENRE']][0] * genre_movie_ph_table[entry['VM_GENRE']][entry['VM_TITLE']][0]
         entropy += -p * math.log(p, 2)
 
+        p = user_genre_ph_table[entry['hashed_ID']][entry['VM_GENRE']][1] * genre_movie_ph_table[entry['VM_GENRE']][entry['VM_TITLE']][1]
+        weird_entropy += p
+
     print entropy
+    print weird_entropy
