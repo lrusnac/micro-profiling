@@ -1,22 +1,10 @@
-import zipfile
-import csv
 import os
-
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.path.insert(0, '../00-common')
+from common import get_data_file_pointer
 
-PATH = '../00-common/'
-ZIPFILEPATH = '10_percent_with_time_fields_clean_genres'
-
-csv.field_size_limit(1000000000)
 frequencies = {}
 counters = {}
-
-def get_data_file_pointer():
-    with zipfile.ZipFile(PATH + ZIPFILEPATH + '.zip') as zf:
-        r = csv.DictReader(zf.open(ZIPFILEPATH + '.csv'), delimiter=';')
-        return r
 
 def addEntryGenre(genre, movie):
     if genre not in frequencies:
@@ -33,7 +21,7 @@ def addEntryGenre(genre, movie):
     counters[genre] = counters[genre] + 1
 
 if __name__ == '__main__':
-    csvfile = get_data_file_pointer()
+    csvfile = get_data_file_pointer(sys.argv)
     for entry in csvfile:
         genres = entry['VM_GENRE'].split(',')
         if genres[0] == '':
