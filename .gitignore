@@ -1,4 +1,5 @@
 00-common/*.zip
+00-common/*.7z
 00-common/*.csv
 .DS_Store
 *.pyc

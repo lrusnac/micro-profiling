@@ -1,20 +1,12 @@
 import zipfile
 import csv
+import sys
+from common import get_data_file_pointer
 from tqdm import tqdm
 
 from datetime import datetime
 
-PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns_10_percent'
 OUTFILEPATH = '10_percent_with_time_fields'
-
-csv.field_size_limit(1000000000)
-
-def get_data_file_pointer():
-    with zipfile.ZipFile(PATH + ZIPFILEPATH + '.zip') as zf:
-        r = csv.DictReader(zf.open(ZIPFILEPATH + '.csv'), delimiter=';')
-        return r
-
 
 if __name__ == '__main__':
     fields = ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK']
@@ -22,7 +14,7 @@ if __name__ == '__main__':
     with open(OUTFILEPATH + '.csv', 'w') as output:
         writer = csv.writer(output, delimiter=';')
         writer.writerow(fields)
-        csvfile = get_data_file_pointer()
+        csvfile = get_data_file_pointer(sys.argv)
 
         for entry in tqdm(csvfile, total=2576791):
             date = entry['STREAM_START_DATE']

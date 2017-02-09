@@ -2,7 +2,6 @@ import zipfile
 import csv
 from tqdm import tqdm
 import sys
-sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
 
 from datetime import datetime

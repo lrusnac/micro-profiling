@@ -1,24 +1,19 @@
 import zipfile
 import csv
 import os
+import sys
+from common import get_data_file_pointer
 from tqdm import tqdm
 
-PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns'
 OUTFILEPATH = 'no_serier_pruned_columns_10_percent'
 
-csv.field_size_limit(1000000000)
 frequencies = {}
 
-def get_data_file_pointer():
-    with zipfile.ZipFile(PATH + ZIPFILEPATH + '.zip') as zf:
-        r = csv.DictReader(zf.open(ZIPFILEPATH + '.csv'), delimiter=';')
-        return r
-
-
 if __name__ == '__main__':
-    csvfile = get_data_file_pointer()
-    for entry in csvfile:
+    csvfile = get_data_file_pointer(sys.argv)
+
+    print 'Calculating distribution of users...'
+    for entry in tqdm(csvfile, total=16100000):
         if entry['hashed_ID'] not in frequencies:
             frequencies[entry['hashed_ID']] = 0
         frequencies[entry['hashed_ID']] = frequencies[entry['hashed_ID']] + 1
@@ -30,8 +25,9 @@ if __name__ == '__main__':
     with open(OUTFILEPATH + '.csv', 'w') as output:
         writer = csv.writer(output, delimiter=';')
         writer.writerow(fields)
-        csvfile = get_data_file_pointer()
+        csvfile = get_data_file_pointer(sys.argv)
 
+        print 'Wrinting 80 to 90 percentile users to file...'
         for entry in tqdm(csvfile, total=16100000):
             if entry['hashed_ID'] in customers_80_90:
                 writer.writerow(map(lambda field: entry[field], fields))
