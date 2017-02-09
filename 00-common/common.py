@@ -1,6 +1,7 @@
 import zipfile
 import csv
 import os
+import datetime
 import sys
 import __main__
 
@@ -33,6 +34,7 @@ def get_data_file_pointer(data_file, do_print = False):
 
 def print_stats(data_file_path):
     print '### STATS ###'
+    print 'Date: ' + str(datetime.datetime.now())
     curr_script = os.path.realpath(__main__.__file__)
     curr_script = curr_script[curr_script.index('micro-profiling') - len(curr_script):]
     print 'Script: ' + curr_script
