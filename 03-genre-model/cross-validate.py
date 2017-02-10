@@ -75,6 +75,8 @@ if __name__ == '__main__':
             f = genre_values[w]/float(internal_genre_counter[genre])
             genre_movie_ph_table[genre][w] = f
 
+        print genre + " " + str(sum([v[1] for v in genre_movie_ph_table[genre].values()]))
+
     # load test set
     testset = get_data_file_pointer(sys.argv[2])
     entry_count = 0
@@ -89,8 +91,8 @@ if __name__ == '__main__':
                 if movie in genre_movie_ph_table[genre_set]:
                     # add p_i * q_x
                     guess_accuracy_sum = guess_accuracy_sum + \
-                        user_genre_ph_table[user][genre_set] * \
-                        genre_movie_ph_table[genre_set][movie]
+                        - math.log(user_genre_ph_table[user][genre_set] * \
+                        genre_movie_ph_table[genre_set][movie], 2)
         entry_count = entry_count + 1
-    
+
     print guess_accuracy_sum / entry_count

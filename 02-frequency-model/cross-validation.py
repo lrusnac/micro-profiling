@@ -30,7 +30,7 @@ if __name__ == '__main__':
     for entry in tqdm(testset, total=805243):
         movie = entry['VM_TITLE']
         if movie in frequencies:
-            guess_accuracy_sum = guess_accuracy_sum + frequencies[movie]
+            guess_accuracy_sum = guess_accuracy_sum - math.log(frequencies[movie],2)
         entry_count = entry_count + 1
 
     print guess_accuracy_sum / entry_count
