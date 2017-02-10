@@ -56,7 +56,7 @@ def makeUserPredictions(user):
 
 if __name__ == '__main__':
     trainset = get_data_file_pointer(sys.argv[1], True)
-    for entry in tqdm(trainset, total=1771550):
+    for entry in tqdm(trainset, total=1771549):
         user = entry['hashed_ID']
         addEntryGenre(user, entry['VM_GENRE'])
         addEntryMovie(entry['VM_TITLE'], entry['VM_GENRE'])
@@ -75,13 +75,12 @@ if __name__ == '__main__':
             f = genre_values[w]/float(internal_genre_counter[genre])
             genre_movie_ph_table[genre][w] = f
 
-        print genre + " " + str(sum([v[1] for v in genre_movie_ph_table[genre].values()]))
-
     # load test set
     testset = get_data_file_pointer(sys.argv[2])
     entry_count = 0
     guess_accuracy_sum = 0
-    for entry in tqdm(testset, total=805243):
+    zero_probability_rec = 0
+    for entry in tqdm(testset, total=805242):
         user = entry['hashed_ID']
         genre_set = entry['VM_GENRE']
         movie = entry['VM_TITLE']
@@ -93,6 +92,10 @@ if __name__ == '__main__':
                     guess_accuracy_sum = guess_accuracy_sum + \
                         - math.log(user_genre_ph_table[user][genre_set] * \
                         genre_movie_ph_table[genre_set][movie], 2)
-        entry_count = entry_count + 1
+
+                    entry_count = entry_count + 1
+        else:
+            zero_probability_rec += 1
 
     print guess_accuracy_sum / entry_count
+    print zero_probability_rec
