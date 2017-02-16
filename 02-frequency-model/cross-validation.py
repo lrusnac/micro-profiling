@@ -13,7 +13,7 @@ if __name__ == '__main__':
     rows_count = 0
     trainset = get_data_file_pointer(sys.argv[1])
     # count number of times movies appear
-    for entry in tqdm(trainset, total=1771550):
+    for entry in tqdm(trainset, total=1771549):
         rows_count = rows_count + 1
         if entry['VM_TITLE'] not in counters:
             counters[entry['VM_TITLE']] = 0
@@ -27,10 +27,10 @@ if __name__ == '__main__':
     testset = get_data_file_pointer(sys.argv[2])
     entry_count = 0
     guess_accuracy_sum = 0
-    for entry in tqdm(testset, total=805243):
+    for entry in tqdm(testset, total=805242):
         movie = entry['VM_TITLE']
         if movie in frequencies:
             guess_accuracy_sum = guess_accuracy_sum - math.log(frequencies[movie],2)
-        entry_count = entry_count + 1
+            entry_count = entry_count + 1
 
     print guess_accuracy_sum / entry_count
