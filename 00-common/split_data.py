@@ -36,7 +36,7 @@ if __name__ == '__main__':
             train_writer = csv.writer(train, delimiter=';')
             train_writer.writerow(fields)
 
-            csvfile = get_data_file_pointer(sys.argv)
+            csvfile = get_data_file_pointer(sys.argv[1])
 
             for entry in tqdm(csvfile, total=2576791):
                 if previous_customer is not '' and entry['hashed_ID'] == previous_customer:
