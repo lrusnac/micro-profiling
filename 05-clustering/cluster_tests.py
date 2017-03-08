@@ -48,7 +48,6 @@ if __name__ == '__main__':
 
         for entry in tqdm(csvfile, total=805242):
             line = np.array([entry['VM_PRODUCTION_YEAR'], entry['HOUR_OF_DAY'], entry['DAY_OF_WEEK']])
-            line.reshape(-1, 1)
-            entry['KMeans'] = kmeans.predict(line)[0]
+            entry['KMeans'] = kmeans.predict(line.reshape(-1, 1))[0]
 
             writer.writerow(map(lambda field: entry[field], fields))
