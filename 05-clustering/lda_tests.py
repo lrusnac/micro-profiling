@@ -8,6 +8,6 @@ if __name__ == '__main__':
 
     print dataset
 
-    lda = dec.LatentDirichletAllocation(n_jobs=-1).fit(dataset)
+    lda = dec.LatentDirichletAllocation(n_jobs=-1, learning_method='batch').fit(dataset)
     print lda
     print lda.components_
