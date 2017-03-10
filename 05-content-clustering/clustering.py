@@ -36,7 +36,8 @@ if __name__ == '__main__':
    
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), len(movies)), dtype=np.int8) # should be a new sparse matrix
     # add 1 to the movie,account coordinates
-
+    matr.sum_duplicates()
+    matr.data = np.ones(len(matr.col), dtype=np.int8)
     print matr.toarray()
 
     # dataset = np.genfromtxt(sys.argv[1], delimiter=';', usecols=(2, 3, 10, 11), dtype=None, names=True, comments='@')
