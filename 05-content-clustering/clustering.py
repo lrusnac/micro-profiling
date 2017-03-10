@@ -40,6 +40,8 @@ if __name__ == '__main__':
     matr.data = np.ones(len(matr.col), dtype=np.int8)
     print matr.toarray()
 
+    print 'number of movies: ' + str(len(movies))
+    print 'number of accounts: ' + str(len(accounts))
     # dataset = np.genfromtxt(sys.argv[1], delimiter=';', usecols=(2, 3, 10, 11), dtype=None, names=True, comments='@')
     # dataset = np.genfromtxt(sys.argv[1], delimiter=';', usecols=(2, 10, 11), dtype=None, skip_header=1, comments='@')
 
