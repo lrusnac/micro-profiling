@@ -47,15 +47,10 @@ if __name__ == '__main__':
 
     # print dataset
 
-    # kmeans = cl.KMeans(n_jobs=-1).fit(dataset)
-    # print kmeans
-    # print kmeans.labels_
-    # print kmeans.cluster_centers_
-
-    # labels = kmeans.labels_
-    # cluster_centers = kmeans.cluster_centers_
-
-    # print(labels)
+    kmeans = cl.KMeans(n_jobs=-1, n_clusters=100).fit(matr.transpose())
+    print kmeans
+    print kmeans.labels_
+    print kmeans.cluster_centers_
 
     # merge dataset with labels and do the cross validation as we do with genres
 
