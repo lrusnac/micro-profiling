@@ -1,12 +1,13 @@
 import sys
 import numpy as np
 import sklearn.cluster as cl
-import csv
 sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
 from tqdm import tqdm
 
 from scipy.sparse import coo_matrix
+from sklearn.cluster import KernelKMeans
+from sklearn.metrics.pairwise import cosine_similarity
 
 OUTFILEPATH = 'cluster'
 
@@ -21,7 +22,7 @@ if __name__ == '__main__':
     for transact in tqdm(csvfile, total=1771549):
         if transact['VM_TITLE'] not in movies:
             movies[transact['VM_TITLE']] = len(movies)
-	
+
         if transact['hashed_ID'] not in accounts:
 	    accounts[transact['hashed_ID']] = len(accounts)
     col = []
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     for transact in tqdm(csvfile, total=1771549):
         col.append(movies[transact['VM_TITLE']])
         row.append(accounts[transact['hashed_ID']])
-   
+
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), len(movies)), dtype=np.int8) # should be a new sparse matrix
     # add 1 to the movie,account coordinates
     matr.sum_duplicates()
@@ -46,8 +47,7 @@ if __name__ == '__main__':
     # dataset = np.genfromtxt(sys.argv[1], delimiter=';', usecols=(2, 10, 11), dtype=None, skip_header=1, comments='@')
 
     # print dataset
-
-    kmeans = cl.KMeans(n_jobs=-1, n_clusters=100).fit(matr.transpose())
+    kmeans = KernelKMeans(n_clusters=10, kernel=cosine_similarity, verbose=3).fit(matr.transpose())
     print kmeans
     print kmeans.labels_
     print kmeans.cluster_centers_
