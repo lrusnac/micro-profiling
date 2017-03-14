@@ -5,6 +5,8 @@ sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
 from tqdm import tqdm
 
+import csv
+
 from scipy.sparse import coo_matrix
 from sklearn.cluster import KernelKMeans
 from sklearn.metrics.pairwise import cosine_similarity
@@ -46,8 +48,8 @@ if __name__ == '__main__':
 
     # print dataset
     kmeans = KernelKMeans(n_clusters=10, kernel=cosine_similarity).fit(matr.transpose())
-    print kmeans.labels_
-
+    labels =  kmeans.labels_
+    print labels
 
     # merge dataset with labels and do the cross validation as we do with genres
     # save new col as 'KMeans'
