@@ -47,7 +47,7 @@ if __name__ == '__main__':
     print 'number of accounts: ' + str(len(accounts))
 
     # print dataset
-    kmeans = KernelKMeans(n_clusters=10, kernel=cosine_similarity).fit(matr.transpose())
+    kmeans = KernelKMeans(n_clusters=10, kernel=cosine_similarity, kernel_params={'dense_output': False}).fit(matr.transpose())
     labels =  kmeans.labels_
     print labels
 
