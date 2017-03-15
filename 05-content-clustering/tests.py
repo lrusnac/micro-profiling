@@ -30,15 +30,11 @@ col = [0, 2, 3, 0, 2, 3, 4, 1, 2, 3, 4, 3, 0, 1, 4]
 row = [0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 4, 4, 4]
 data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-df = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(5000, 5))
-
-print '-------------------------------'
-print df.getcol(2).transpose().dot(df.getcol(2))[0,0]
-print '-------------------------------'
+df = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(5, 5))
 
 from KMeans import KMeans
 
-kmeans = KMeans(df, 2)
+kmeans = KMeans(df, 3)
 
-# kmeans.fit()
-# print kmeans.labels
+kmeans.fit()
+print kmeans.labels

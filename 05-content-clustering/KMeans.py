@@ -12,6 +12,9 @@ class KMeans(object):
         self.centroids = None
         self.labels = np.ones(self.df.shape[1], dtype=int)
 
+        self._precomputed_squared_points = np.zeroes(self.df.shape[1])
+        self._precomputed_squared_centroids = np.zeroes(n_clusters)
+
     def get_centroids(self):
         A = coo_matrix((np.ones(self.labels.size), (np.array(range(0, self.labels.size)), self.labels)), shape=(self.labels.size, self.n_clusters), dtype=np.int8).tocsc()
 
@@ -31,6 +34,11 @@ class KMeans(object):
 
     def get_labels(self):
         labels = np.ones(self.df.shape[1], dtype=int)
+
+        # precompute points squared values
+        for i in xrange(self.centroids.shape[1]):
+            centroid = self.centroids.getcol(i)
+            self._precomputed_squared_centroids[i] = math.sqrt(centroid.transpose().dot(centroid)[0,0])
 
         for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
             point = self.df.getcol(i)
@@ -54,13 +62,18 @@ class KMeans(object):
 
         return labels
 
-    def distance(self, p1, p2):
+    def distance(self, p1, p2, i, j):
         ab = (p1.transpose()).dot(p2)[0,0]
         if ab == 0:
             return 1
-        aa = (p1.transpose()).dot(p1)[0,0]
-        bb = (p2.transpose()).dot(p2)[0,0]
-        return 1 - ab / (math.pow(aa, 0.5) * math.pow(bb, 0.5))
+        # aa = (p1.transpose()).dot(p1)[0,0]
+        # bb = (p2.transpose()).dot(p2)[0,0]
+        # return 1 - ab / (math.pow(aa, 0.5) * math.pow(bb, 0.5))
+
+        aa = self._precomputed_squared_points(i)
+        bb = self._precomputed_squared_centroids(j)
+
+        return 1 - ab / (aa * bb)
 
 
     def _to_continue(self, old_centroids, new_centroids, iterations):
@@ -72,6 +85,11 @@ class KMeans(object):
         # get n_clusters initial centroids
         indeces = [random.randint(0, self.df.shape[1]-1) for i in xrange(self.n_clusters)] # TODO duplicates
         self.centroids = self.df[:,indeces]
+
+        # precompute points squared values
+        for i in tqdm(xrange(self.df.shape[1])):
+            point = self.df.getcol(i)
+            self._precomputed_squared_points[i] = math.sqrt(point.transpose().dot(point)[0,0])
 
         iterations = 0
         old_centroids = None
