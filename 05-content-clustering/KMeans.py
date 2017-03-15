@@ -50,7 +50,7 @@ class KMeans(object):
             for j in xrange(self.centroids.shape[1]):
                 centroid = self.centroids.getcol(j)
 
-                dist = self.distance(point, centroid)
+                dist = self.distance(point, centroid, i, j)
                 if dist < min_distance:
                     closest_centroid = j
                     min_distance = dist
