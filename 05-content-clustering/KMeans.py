@@ -70,8 +70,8 @@ class KMeans(object):
         # bb = (p2.transpose()).dot(p2)[0,0]
         # return 1 - ab / (math.pow(aa, 0.5) * math.pow(bb, 0.5))
 
-        aa = self._precomputed_squared_points(i)
-        bb = self._precomputed_squared_centroids(j)
+        aa = self._precomputed_squared_points[i]
+        bb = self._precomputed_squared_centroids[j]
 
         return 1 - ab / (aa * bb)
 
