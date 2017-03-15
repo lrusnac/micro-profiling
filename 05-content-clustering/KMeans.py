@@ -12,8 +12,8 @@ class KMeans(object):
         self.centroids = None
         self.labels = np.ones(self.df.shape[1], dtype=int)
 
-        self._precomputed_squared_points = np.zeroes(self.df.shape[1])
-        self._precomputed_squared_centroids = np.zeroes(n_clusters)
+        self._precomputed_squared_points = np.zeros(self.df.shape[1])
+        self._precomputed_squared_centroids = np.zeros(n_clusters)
 
     def get_centroids(self):
         A = coo_matrix((np.ones(self.labels.size), (np.array(range(0, self.labels.size)), self.labels)), shape=(self.labels.size, self.n_clusters), dtype=np.int8).tocsc()
