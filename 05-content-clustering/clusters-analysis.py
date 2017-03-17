@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     csvfile = get_data_file_pointer(sys.argv[1])
 
-    img = Image.new('RGB', (n_clusters, len(accounts), '#FFFFFF'))
+    img = Image.new('RGB', (n_clusters, len(accounts)), '#FFFFFF')
 
     print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=2576791):
