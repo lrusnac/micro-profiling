@@ -32,14 +32,23 @@ if __name__ == "__main__":
 
     csvfile = get_data_file_pointer(sys.argv[1])
 
-    img = Image.new('RGB', (n_clusters, len(accounts)), '#FFFFFF')
-
     print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=2576791):
         row.append(accounts[transact['hashed_ID']])
         col.append(int(transact['KMeans']))
 
-        img.putpixel((int(transact['KMeans']), accounts[transact['hashed_ID']]), 1)
-    img.save('image.png')
-
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
+
+    matr = matr.tocsr()
+
+    img = Image.new('RGB', (n_clusters, len(accounts)), '#FFFFFF')
+    for i in n_clusters:
+        maxrow = matr.getrow(i).max()
+        for j in len(accounts):
+            pixel = 255
+            if matr[i, j] != 0:
+                pixel = 200 - int(200/maxrow * matr[i, j])
+
+            img.putpixel((i, j), pixel)
+            
+    img.save('image.png')
