@@ -7,6 +7,8 @@ import csv
 from tqdm import tqdm
 from scipy.sparse import coo_matrix
 
+from PIL import Image
+
 accounts = {}
 n_clusters = -1
 
@@ -22,6 +24,7 @@ if __name__ == "__main__":
         if int(transact['KMeans']) > n_clusters:
             n_clusters = int(transact['KMeans'])
 
+    n_clusters += 1
     print 'n_clusters ' + str(n_clusters)
 
     col = []
@@ -29,9 +32,14 @@ if __name__ == "__main__":
 
     csvfile = get_data_file_pointer(sys.argv[1])
 
+    img = Image.new('RGB', (n_clusters, len(accounts), '#FFFFFF'))
+
     print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=2576791):
         row.append(accounts[transact['hashed_ID']])
         col.append(int(transact['KMeans']))
 
-    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters+1))
+        img.putpixel((int(transact['KMeans']), accounts[transact['hashed_ID']]), 1)
+    img.save('image.png')
+
+    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
