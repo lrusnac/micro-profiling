@@ -42,13 +42,13 @@ if __name__ == "__main__":
     matr = matr.tocsr()
 
     img = Image.new('RGB', (n_clusters, len(accounts)), '#FFFFFF')
-    for i in n_clusters:
+    for i in xrange(len(accounts)):
         maxrow = matr.getrow(i).max()
-        for j in len(accounts):
+        for j in xrange(n_clusters):
             pixel = 255
             if matr[i, j] != 0:
                 pixel = 200 - int(200/maxrow * matr[i, j])
 
-            img.putpixel((i, j), pixel)
+            img.putpixel((j, i), (pixel, pixel, pixel))
             
     img.save('image.png')
