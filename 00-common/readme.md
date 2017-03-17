@@ -21,7 +21,7 @@
 	* Training and test sets in a 70/30 distribution based on dataset [2](#dataset_2)
 
 ### Bash Sorting of File
-This sorts `<in_file>` based on the whole line:
+This sorts `in_file` based on the whole line and outputs the result to `out_file`:
 `
-head -n1 <in_file> > <out_file> ; tail -n+2 <in_file> | sort >> <out_file>
+export in_file="some_input.csv" ; export out_file="some_output.csv" ; head -n1 $in_file > $out_file ; tail -n+2 $in_file | sort >> $out_file
 `
