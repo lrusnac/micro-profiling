@@ -22,7 +22,7 @@ if __name__ == "__main__":
         if int(transact['KMeans']) > n_clusters:
             n_clusters = int(transact['KMeans'])
 
-    print 'n_clusters' + str(n_clusters)
+    print 'n_clusters ' + str(n_clusters)
 
     col = []
     row = []
@@ -34,4 +34,4 @@ if __name__ == "__main__":
         row.append(accounts[transact['hashed_ID']])
         col.append(int(transact['KMeans']))
 
-    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
+    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters+1))
