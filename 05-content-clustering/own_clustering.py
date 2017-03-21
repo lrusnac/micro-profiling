@@ -45,21 +45,22 @@ if __name__ == '__main__':
     print 'number of accounts: ' + str(len(accounts))
 
     # print dataset
-    kmeans = KMeans(matr, 10).fit()
+    kmeans = KMeans(matr, 100)
+    kmeans.fit()
     labels =  kmeans.labels
     print labels
 
     # merge dataset with labels and do the cross validation as we do with genres
     # save new col as 'KMeans'
 
-    # fields = ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK', 'KMeans']
+    fields = ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK', 'KMeans']
     #
-    # with open(OUTFILEPATH, 'w') as output:
-    #     writer = csv.writer(output, delimiter=';')
-    #     writer.writerow(fields)
-    #     csvfile = get_data_file_pointer(sys.argv[1])
-    #
-    #     for entry in tqdm(csvfile, total=1771549):
-    #         entry['KMeans'] = labels[movies[entry['VM_TITLE']]]
-    #
-    #         writer.writerow(map(lambda field: entry[field], fields))
+    with open(OUTFILEPATH, 'w') as output:
+        writer = csv.writer(output, delimiter=';')
+        writer.writerow(fields)
+        csvfile = get_data_file_pointer(sys.argv[1])
+    
+        for entry in tqdm(csvfile, total=1771549):
+            entry['KMeans'] = labels[movies[entry['VM_TITLE']]]
+    
+            writer.writerow(map(lambda field: entry[field], fields))
