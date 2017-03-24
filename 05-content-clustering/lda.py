@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
     # Normalize: 'l1' = each row sums to 1
-    matr = normalize(matr, axis=1, norm='l1')
+    # matr = normalize(matr, axis=1, norm='l1')
 
     print matr.todense()
 
@@ -109,6 +109,8 @@ if __name__ == '__main__':
 
     #
     
+    # for each account calculate the distribution of clusters through the topics it has
+
     #print transformed.dot(normalize(lda.components_, axis=1, norm='l1'))
 
     #print 'First candidate'
