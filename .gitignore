@@ -3,3 +3,4 @@
 00-common/*.csv
 .DS_Store
 *.pyc
+.vscode/

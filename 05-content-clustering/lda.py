@@ -16,7 +16,6 @@ n_topics = 30
 min_topic_p = 0.05
 
 def get_cluster_matrix(filepath):
-    ##### Create the sparse matrix
     csvfile = get_data_file_pointer(filepath)
 
     ##### Remember index of each account (i.e. which order they appear in the transactions)
@@ -44,8 +43,38 @@ def get_cluster_matrix(filepath):
         row.append(accounts[transact['hashed_ID']])
         col.append(int(transact['KMeans']))
 
+    ##### Sparse matrix
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
     return (matr, accounts)
+
+def get_cluster_movies_map(filepath):
+    csvfile = get_data_file_pointer(filepath)
+    clusters = {}
+    clusters_count = {}
+
+    for trans in tqdm(csvfile, total=get_line_count(filepath)):
+        cluster = trans['KMeans']
+        movie = trans['VM_TITLE']
+
+        # Initialize/add movie list and count for cluster
+        if cluster not in clusters:
+            clusters[cluster] = {}
+            clusters_count[cluster] = 1
+        else:
+            clusters_count[cluster] += 1
+        
+        # Initialize/add movie's count in cluster
+        if movie not in clusters[cluster]:
+            clusters[cluster][movie] = 1
+        else:
+            clusters[cluster][movie] += 1
+    
+    # Transform raw movie counts to movie probabilities within cluster
+    for cluster, movies in clusters.iteritems():
+        for movie, count in movies.iteritems():
+            clusters[cluster][movie] = count / clusters_count[cluster]
+
+    return clusters
 
 def fit_and_get_lda(matrix):
     lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1, learning_method='batch', verbose=3, max_iter=1)
