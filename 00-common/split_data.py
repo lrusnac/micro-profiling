@@ -6,7 +6,7 @@ import sys
 
 from common import get_data_file_pointer
 
-OUTFILEPATH = '10_percent_v01'
+# OUTFILEPATH = '10_percent_v01'
 
 csv.field_size_limit(1000000000)
 
@@ -26,7 +26,10 @@ def write_list_to_csv(writer, lines):
         writer.writerow(map(lambda field: line[field], fields))
 
 if __name__ == '__main__':
-    fields = ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK']
+    OUTFILEPATH = sys.argv[1].split('/')[-1].split('.')[0]
+    csvfile = get_data_file_pointer(sys.argv[1])
+
+    fields = csvfile.fieldnames # ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK']
     stack = []
 
     with open(OUTFILEPATH + '_test' + '.csv', 'w') as test:
@@ -35,8 +38,6 @@ if __name__ == '__main__':
         with open(OUTFILEPATH + '_train' + '.csv', 'w') as train:
             train_writer = csv.writer(train, delimiter=';')
             train_writer.writerow(fields)
-
-            csvfile = get_data_file_pointer(sys.argv[1])
 
             for entry in tqdm(csvfile, total=2576791):
                 if previous_customer is not '' and entry['hashed_ID'] == previous_customer:

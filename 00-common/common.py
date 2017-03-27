@@ -32,6 +32,15 @@ def get_data_file_pointer(data_file, do_print = False):
     else:
         return None
 
+def get_line_count(filepath):
+    if filepath.endswith('.zip'):
+        csvName = filepath.split('/')[-1][0:-4] + '.csv'
+        with get_zip_data_file_pointer(filepath, csvName) as file:
+            return sum(1 for row in file)
+    else:
+        with open(filepath) as file:
+            return sum(1 for row in file)
+
 def print_stats(data_file_path):
     print '### STATS ###'
     print 'Date: ' + str(datetime.datetime.now())
