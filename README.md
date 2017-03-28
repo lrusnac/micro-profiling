@@ -19,6 +19,7 @@ blah
 
 
 ## Cross-validation with same data set as train and test (MDL purposes)
+### Guessing group (e.g. cluster or genre)
 |           Model            |  LDA (topics) | Entropy |
 | -------------------------- | :-----------: | :-----: |
 | Genre (as sets)            | 10            | 3.89    |
