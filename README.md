@@ -11,6 +11,7 @@ blah
 | Genre + Time intervals     |                | 7.83    | 22 %    |
 | Clustering (100 clusters)  |                | 7.5     | 9.8 %   |
 | Clustering (40 clusters)   |                | 8.18    | 5.3 %   |
+| Clustering (40 clusters)   | 10             | 8.92    |         |
 
 ### Guessing group (e.g. cluster or genre)
 |           Model            |  LDA (topics)  | Entropy | Loss    |
