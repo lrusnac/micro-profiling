@@ -12,6 +12,7 @@ from scipy.sparse import coo_matrix
 from PIL import Image
 
 n_clusters = -1
+lda_max_iter = 10
 n_topics = 30
 min_topic_p = 0.05
 
@@ -72,12 +73,13 @@ def get_cluster_movies_map(filepath):
     # Transform raw movie counts to movie probabilities within cluster
     for cluster, movies in clusters.iteritems():
         for movie, count in movies.iteritems():
-            clusters[cluster][movie] = count / clusters_count[cluster]
+            clusters[cluster][movie] = float(count) / clusters_count[cluster]
 
     return clusters
 
 def fit_and_get_lda(matrix):
-    lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1, learning_method='batch', verbose=3, max_iter=1)
+    lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1,
+        learning_method='batch', verbose=3, max_iter=lda_max_iter)
     lda.fit(matrix)
     return lda
 
