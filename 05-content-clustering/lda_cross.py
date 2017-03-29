@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Fit LDA
     lda = fit_and_get_lda(train_matr)
-    # Transform account-cluster matrix accoring to fitted LDA
+    # Transform account-cluster matrix according to fitted LDA
     train_transform = lda.transform(train_matr)
     # Get account-topic matrix from transformed matrix
     acc_top_matrix = get_account_topic_matrix(train_transform, acc_by_index)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
         ## Guess cluster
         if u_hash in acc_top_matrix:
-            
+
             p = sum(t_p * top_clus_matrix[i][int(cluster)]
                 for i, t_p in enumerate(acc_top_matrix[u_hash]))
 
@@ -60,8 +60,8 @@ if __name__ == '__main__':
         else:
             guess_accuracy_sum -= math.log(p, 2)
         entries += 1
-            
-    
+
+
     print 'Entropy: {}'.format(guess_accuracy_sum / entries)
     print 'Loss: {}'.format(zero_p_count / n_transactions)
 
