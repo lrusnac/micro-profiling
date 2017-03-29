@@ -24,7 +24,7 @@ def test_lda_on_clusters(train_file, test_file):
 
     # Fit LDA
     lda = fit_and_get_lda(train_matr)
-    # Transform account-cluster matrix accoring to fitted LDA
+    # Transform account-cluster matrix according to fitted LDA
     train_transform = lda.transform(train_matr)
     # Get account-topic matrix from transformed matrix
     acc_top_matrix = get_account_topic_matrix(train_transform, acc_by_index)
@@ -113,8 +113,8 @@ def test_lda_on_genres(train_file, test_file):
         else:
             guess_accuracy_sum -= math.log(p, 2)
         entries += 1
-            
-    
+
+
     print 'Entropy: {}'.format(guess_accuracy_sum / entries)
     print 'Loss: {}'.format(zero_p_count / n_transactions)
 
