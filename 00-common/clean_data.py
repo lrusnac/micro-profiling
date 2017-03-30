@@ -22,7 +22,7 @@ def clean_duplicates(entries):
 
         for entry in s_group:
             diff = (entry['DATE_OBJ'] - last_date).total_seconds() / 60
-            if diff > min(int(entry['VM_RUN_TIME']), 120):
+            if diff > max(int(entry['VM_RUN_TIME']) * 2, 120):
                 out_entries.append(entry)
                 last_date = entry['DATE_OBJ']
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         writer = csv.writer(out_file, delimiter=';')
         writer.writerow(fields)
         csvfile = get_data_file_pointer(filepath)
-
+        
         for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
             date = entry['STREAM_START_DATE']
             date = datetime.strptime(date, '%d%b%Y:%H:%M:%S.%f')
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             entry['DAY_OF_WEEK'] = date.weekday()
             entry['DATE_OBJ'] = date
 
-            if entry['hashed_ID'] is not user_hash:
+            if entry['hashed_ID'] != user_hash:
                 clean_and_write_entries(writer, user_hist, fields)
                 user_hist = []
                 user_hash = entry['hashed_ID']
