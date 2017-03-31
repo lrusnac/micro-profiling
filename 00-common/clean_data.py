@@ -15,6 +15,7 @@ def clean_duplicates(entries):
     out_entries = []
 
     for group in entry_groups:
+        # Remove "non-movies"
         if group[0]['VM_TITLE'] in ['HBO Nordic', 'YouSee Film & Serier', 'C More']:
             break
         s_group = sorted(group, key=lambda e: e['DATE_OBJ'])
@@ -57,11 +58,28 @@ if __name__ == '__main__':
         csvfile = get_data_file_pointer(filepath)
         
         for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
+            # Remove series
+            if 'Serier' in entry['VOD_CONTENT_TYPE']:
+                continue
+            
+            # Add simplified timestamps
             date = entry['STREAM_START_DATE']
             date = datetime.strptime(date, '%d%b%Y:%H:%M:%S.%f')
             entry['HOUR_OF_DAY'] = date.hour
             entry['DAY_OF_WEEK'] = date.weekday()
             entry['DATE_OBJ'] = date
+
+            # Clean genres (group adult genres)
+            genres = entry['VM_GENRE']
+            if 'Erotik' in genres or 'European' in genres or\
+                'Amateur' in genres or 'Nordic' in genres:
+                entry['VM_GENRE'] = 'adult'
+            else:
+                genres = genres.lower().split(',')
+                if genres[0] == '':
+                    entry['VM_GENRE'] = 'unknown'
+                else:
+                    entry['VM_GENRE'] = ','.join(sorted(genres))
 
             if entry['hashed_ID'] != user_hash:
                 clean_and_write_entries(writer, user_hist, fields)

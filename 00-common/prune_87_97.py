@@ -24,10 +24,10 @@ if __name__ == '__main__':
     
     customer_count = len(frequencies)
 
-    customers_80_90 = sorted(frequencies, key=frequencies.get,
-        reverse=True)[int(customer_count*0.1) : int(customer_count * 0.2)]
-    print 'Most: {}  Least: {}'.format(customers_80_90[0], customers_80_90[-1])
-    customers_80_90 = frozenset(customers_80_90)
+    customers_87_97 = sorted(frequencies, key=frequencies.get,
+        reverse=True)[int(customer_count*0.03) : int(customer_count * 0.13)]
+    print 'Most: {}  Least: {}'.format(customers_87_97[0], customers_87_97[-1])
+    customers_87_97 = frozenset(customers_87_97)
     fields = [ 'hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID' ]
 
     with open(OUTFILEPATH, 'w') as output:
@@ -37,5 +37,5 @@ if __name__ == '__main__':
 
         print 'Wrinting 80 to 90 percentile users to file...'
         for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
-            if entry['hashed_ID'] in customers_80_90:
+            if entry['hashed_ID'] in customers_87_97:
                 writer.writerow(map(lambda field: entry[field], csvfile.fieldnames))
