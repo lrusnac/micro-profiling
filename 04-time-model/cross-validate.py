@@ -5,8 +5,10 @@ import math
 import sys
 sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
+from common import get_line_count
 from tqdm import tqdm
 
+time_interval_splits = sorted([0, 5, 11, 16])
 max_predictions = 50
 
 user_genre = {}
@@ -56,21 +58,28 @@ def makeUserPredictions(user):
 
 def hourToGroup(hour):
     hour = int(hour)
-    if hour < 5:
+
+    # Need at least two splitting points to give
+    # different intervals
+    if len(time_interval_splits) == 1:
         return '0'
-    elif hour < 11:
-        return '1'
-    elif hour < 16:
-        return '2'
-    else:
-        return '3'
+
+    interval = 0
+    for split in time_interval_splits:
+        if hour < split:
+            return str(interval)
+        interval += 1
+    
+    # Not smaller than any of the splits,
+    # i.e. it's later than the last, thus group 0
+    return '0'
 
 def nextPartOfDay(part_of_day):
     return str((int(part_of_day) + 1) % 4)
 
 if __name__ == '__main__':
     trainset = get_data_file_pointer(sys.argv[1], True)
-    for entry in tqdm(trainset, total=1771549):
+    for entry in tqdm(trainset, total=get_line_count(sys.argv[1])):
         user = entry['hashed_ID']
         addEntryGenre(user + '_' + hourToGroup(entry['HOUR_OF_DAY']), entry['VM_GENRE'])
         addEntryMovie(entry['VM_TITLE'], entry['VM_GENRE'])
@@ -94,7 +103,7 @@ if __name__ == '__main__':
     entry_count = 0
     guess_accuracy_sum = 0
     zero_probability_rec = 0
-    for entry in tqdm(testset, total=805242):
+    for entry in tqdm(testset, total=get_line_count(sys.argv[2])):
         user = entry['hashed_ID']
         genre_set = entry['VM_GENRE']
         movie = entry['VM_TITLE']
@@ -123,5 +132,5 @@ if __name__ == '__main__':
         else:
             zero_probability_rec += 1
 
-    print guess_accuracy_sum / entry_count
-    print zero_probability_rec
+    print 'Entropy: {}'.format(guess_accuracy_sum / entry_count)
+    print 'Loss: {}'.format(zero_probability_rec / float(entry_count))
