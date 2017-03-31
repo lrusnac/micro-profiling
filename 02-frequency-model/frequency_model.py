@@ -1,29 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import zipfile
-import csv
+import sys
 import math
+from tqdm import tqdm
 
-PATH = '../00-common/'
-ZIPFILEPATH = 'no_serier_pruned_columns_10_percent'
-
-csv.field_size_limit(1000000000)
+sys.path.insert(0, '../00-common')
+from common import get_data_file_pointer
+from common import get_line_count
 
 counters = {}
 frequencies = {}
 h = {}
 
-def get_data_file_pointer():
-    with zipfile.ZipFile(PATH + ZIPFILEPATH + '.zip') as zf:
-        r = csv.DictReader(zf.open(ZIPFILEPATH + '.csv'), delimiter=';')
-        return r
-
-
 if __name__ == '__main__':
     rows_count = 0
-    csvfile = get_data_file_pointer()
-    for entry in csvfile:
+    csvfile = get_data_file_pointer(sys.argv[1], do_print = True)
+
+    for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
         rows_count = rows_count + 1
         if entry['VM_TITLE'] not in counters:
             counters[entry['VM_TITLE']] = 0
