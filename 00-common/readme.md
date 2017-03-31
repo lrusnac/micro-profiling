@@ -25,3 +25,18 @@ This sorts `in_file` based on the whole line and outputs the result to `out_file
 `
 export in_file="some_input.csv" ; export out_file="some_output.csv" ; head -n1 $in_file > $out_file ; tail -n+2 $in_file | sort >> $out_file
 `
+
+### Cleaning the Data
+First we assign a transaction ID to every transaction:  
+WARNING!! Might need adjustment based on your setup (commands on some systems read line endings differently)
+
+`
+head -n1 YouseePlay_stream_data.csv | tr -d '\r\n' > original.csv ; echo ";TRANS_ID" >> original.csv ; tail -n+2 YouseePlay_stream_data.csv | head | awk -v RS='\r*\n' '{printf("%s;%d\n", $0, NR)}' >> original.csv
+`
+
+Move hashed_ID and TRANS_ID to the beginning of every line (preparation for sorting):
+`
+perl -pe 's|^(.*);([^;]*;[^;]*?)$|\2;\1|' original.csv > orig.csv
+`
+
+Then sort like above (but based on the hashed_ID field. 

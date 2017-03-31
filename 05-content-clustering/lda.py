@@ -13,7 +13,7 @@ from PIL import Image
 
 n_clusters = -1
 lda_max_iter = 10
-n_topics = 30
+n_topics = 10
 min_topic_p = 0.05
 
 def get_cluster_matrix(filepath):
@@ -48,13 +48,47 @@ def get_cluster_matrix(filepath):
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
     return (matr, accounts)
 
-def get_cluster_movies_map(filepath):
+def get_genre_matrix(filepath):
+    csvfile = get_data_file_pointer(filepath)
+
+    ##### Remember index of each account (i.e. which order they appear in the transactions)
+    # print 'Creating the hashmaps for accounts indexes'
+    accounts = {}
+    global n_clusters
+    genre_set = set()
+    for transact in tqdm(csvfile, total=get_line_count(filepath)):
+        if transact['hashed_ID'] not in accounts:
+            accounts[transact['hashed_ID']] = len(accounts)
+
+        genre_set.add(transact['VM_GENRE'])
+
+    n_clusters = len(genre_set)
+    #print 'n_clusters ' + str(n_clusters)
+
+    genre_indices = dict((genre, i) for i, genre in enumerate(genre_set))
+
+    col = []
+    row = []
+
+    csvfile = get_data_file_pointer(filepath)
+
+    ##### Populate matrix: each transaction adds one to (hashed_ID, VM_GENRE)
+    #print 'creating the rows and cols lists'
+    for transact in tqdm(csvfile, total=get_line_count(filepath)):
+        row.append(accounts[transact['hashed_ID']])
+        col.append(genre_indices[transact['VM_GENRE']])
+
+    ##### Sparse matrix
+    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
+    return (matr, accounts, genre_indices)
+
+def get_cluster_movies_map(filepath, use_genre=False):
     csvfile = get_data_file_pointer(filepath)
     clusters = {}
     clusters_count = {}
 
     for trans in tqdm(csvfile, total=get_line_count(filepath)):
-        cluster = trans['KMeans']
+        cluster = trans['VM_GENRE'] if use_genre else trans['KMeans']
         movie = trans['VM_TITLE']
 
         # Initialize/add movie list and count for cluster
