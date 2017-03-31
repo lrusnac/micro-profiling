@@ -5,6 +5,7 @@ import math
 import sys
 sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
+from common import get_line_count
 from tqdm import tqdm
 
 max_predictions = 50
@@ -56,7 +57,7 @@ def makeUserPredictions(user):
 
 if __name__ == '__main__':
     trainset = get_data_file_pointer(sys.argv[1], True)
-    for entry in tqdm(trainset, total=1771549):
+    for entry in tqdm(trainset, total=get_line_count(sys.argv[1])):
         user = entry['hashed_ID']
         addEntryGenre(user, entry['VM_GENRE'])
         addEntryMovie(entry['VM_TITLE'], entry['VM_GENRE'])
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     entry_count = 0
     guess_accuracy_sum = 0
     zero_probability_rec = 0
-    for entry in tqdm(testset, total=805242):
+    for entry in tqdm(testset, total=get_line_count(sys.argv[2])):
         user = entry['hashed_ID']
         genre_set = entry['VM_GENRE']
         movie = entry['VM_TITLE']
@@ -97,5 +98,5 @@ if __name__ == '__main__':
         else:
             zero_probability_rec += 1
 
-    print guess_accuracy_sum / entry_count
-    print zero_probability_rec
+    print 'Entropy: {}'.format(guess_accuracy_sum / entry_count)
+    print 'Loss: {}'.format(zero_probability_rec / float(entry_count))
