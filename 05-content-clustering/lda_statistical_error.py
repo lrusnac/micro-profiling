@@ -24,6 +24,23 @@ if __name__ == '__main__':
     doc_topic_distr = lda.transform(train_matr)
     topic_term_distr = lda.components_
 
-    # normalize(topic_term_distr, axis=1, norm='l1')
-    topic_term_distr.sum(axis=1)
+    # topic_term_distr = normalize(topic_term_distr, axis=1, norm='l1')
+    # print topic_term_distr.sum(axis=1)
 
+    computed_input_matrix = doc_topic_distr.dot(topic_term_distr)
+    computed_input_matrix = normalize(computed_input_matrix, axis=1, norm='l1')
+
+    train_matr = normalize(train_matr, axis=1, norm='l1')
+
+    # print computed_input_matrix
+    # print train_matr.todense()
+
+    train_matr = train_matr.todense()
+    line_diff = []
+    for i in xrange(len(computed_input_matrix)):
+        original = train_matr[i].flatten().tolist()[0]
+        computed = computed_input_matrix[i]
+
+        line_diff.append(sum([abs(x[0] - x[1]) for x in zip(original, computed)]))
+
+    print sum(line_diff) / len(line_diff)
