@@ -54,8 +54,9 @@ if __name__ == '__main__':
     # merge dataset with labels and do the cross validation as we do with genres
     # save new col as 'KMeans'
 
-    fields = ['hashed_ID', 'VM_TITLE', 'VM_PRODUCTION_YEAR', 'VM_GENRE', 'VM_RUN_TIME', 'VM_RATING', 'STREAM_START_DATE', 'VOD_CATEGORY', 'VOD_CONTENT_TYPE', 'VM_IMDBID', 'HOUR_OF_DAY', 'DAY_OF_WEEK', 'KMeans']
-    #
+    fields = csvfile.fieldnames
+    fields.append('KMeans')
+
     with open(OUTFILEPATH, 'w') as output:
         writer = csv.writer(output, delimiter=';')
         writer.writerow(fields)
