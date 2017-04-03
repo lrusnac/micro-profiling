@@ -9,7 +9,8 @@ from scipy.sparse import coo_matrix
 
 from KMeans import KMeans
 
-OUTFILEPATH = 'clustered.csv'
+num_clusters = 40
+OUTFILEPATH = 'clustered_'+str(num_clusters)+'_clusters.csv'
 
 movies = {}
 accounts = {}
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     print 'number of accounts: ' + str(len(accounts))
 
     # print dataset
-    kmeans = KMeans(matr, 100)
+    kmeans = KMeans(matr, num_clusters)
     kmeans.fit()
     labels =  kmeans.labels
     print labels
