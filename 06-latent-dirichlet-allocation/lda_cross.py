@@ -11,8 +11,8 @@ from lda import get_account_topic_matrix
 from lda import get_topic_cluster_matrix
 from tqdm import tqdm
 
-guess_movies = True
-use_genre = True
+guess_movies = False
+use_genre = False
 
 def test_lda_on_clusters(train_file, test_file):
     train_matr, accounts = get_cluster_matrix(train_file)

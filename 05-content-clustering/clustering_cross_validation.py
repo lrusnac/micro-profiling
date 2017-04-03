@@ -80,7 +80,9 @@ if __name__ == '__main__':
     entry_count = 0
     guess_accuracy_sum = 0
     zero_probability_rec = 0
+    rows = 0
     for entry in tqdm(testset, total=805242):
+        rows += 1
         user = entry['hashed_ID']
         genre_set = entry['KMeans']
         movie = entry['VM_TITLE']
@@ -98,4 +100,4 @@ if __name__ == '__main__':
             zero_probability_rec += 1
 
     print guess_accuracy_sum / entry_count
-    print zero_probability_rec
+    print zero_probability_rec / float(rows)
