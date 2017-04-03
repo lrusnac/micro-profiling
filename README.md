@@ -14,7 +14,7 @@ We have some different datasets we have tested on (or rather different portions 
 | Genre (as sets)            | 10             | 9.46              |                | 9.94              |                |
 | Genre + Time intervals     |                | 7.83              | 22 %           | 8.61              | 52 %           |
 | Clustering (100 clusters)  |                | 7.5               | 9.8 %          |                   |                |
-| Clustering (40 clusters)   |                | 8.18              | 5.3 %          |                   |                |
+| Clustering (40 clusters)   |                | 8.18              | 5.3 %          | 8.71              | 7 %            |
 | Clustering (40 clusters)   | 10             | 8.92              |                | 9.38              |                |
 
 #### Guessing group (e.g. cluster or genre)
