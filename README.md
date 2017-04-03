@@ -14,8 +14,8 @@ We have some different datasets we have tested on (or rather different portions 
 | Genre (as sets)            | 10             | 9.46              |                | 9.94              |                |
 | Genre + Time intervals     |                | 7.83              | 22 %           | 8.61              | 52 %           |
 | Clustering (100 clusters)  |                | 7.5               | 9.8 %          |                   |                |
-| Clustering (40 clusters)   |                | 8.18              | 5.3 %          |                   |                |
-| Clustering (40 clusters)   | 10             | 8.92              |                |                   |                |
+| Clustering (40 clusters)   |                | 8.18              | 5.3 %          | 8.71              | 7 %            |
+| Clustering (40 clusters)   | 10             | 8.92              |                | 9.38              |                |
 
 #### Guessing group (e.g. cluster or genre)
 |           Model            |  LDA (topics)  | Entropy[[1]](#d1) | Loss[[1]](#d1) |
@@ -34,6 +34,6 @@ We have some different datasets we have tested on (or rather different portions 
 | -------------------------- | :-----------: | :---------------: | :---------------: |
 | Genre (as sets)            | 10            | 3.89              | 4.03              |
 | Genre (as sets)            |               | 1.83              | 2.14              |
-| Clustering (40 clusters)   | 10            | 2.26              |                   |
+| Clustering (40 clusters)   | 10            | 2.26              | 2.48              |
 | Clustering (40 clusters)   | 30            | 2.37              |                   |
 | Clustering (40 clusters)   |               | 1.12              |                   |
