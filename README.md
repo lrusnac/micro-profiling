@@ -34,6 +34,6 @@ We have some different datasets we have tested on (or rather different portions 
 | -------------------------- | :-----------: | :---------------: | :---------------: |
 | Genre (as sets)            | 10            | 3.89              | 4.03              |
 | Genre (as sets)            |               | 1.83              | 2.14              |
-| Clustering (40 clusters)   | 10            | 2.26              |                   |
+| Clustering (40 clusters)   | 10            | 2.26              | 2.48              |
 | Clustering (40 clusters)   | 30            | 2.37              |                   |
 | Clustering (40 clusters)   |               | 1.12              |                   |
