@@ -31,7 +31,7 @@ First we assign a transaction ID to every transaction:
 WARNING!! Might need adjustment based on your setup (commands on some systems read line endings differently)
 
 `
-head -n1 YouseePlay_stream_data.csv | tr -d '\r\n' > original.csv ; echo ";TRANS_ID" >> original.csv ; tail -n+2 YouseePlay_stream_data.csv | head | awk -v RS='\r*\n' '{printf("%s;%d\n", $0, NR)}' >> original.csv
+head -n1 YouseePlay_stream_data.csv | tr -d '\r\n' > original.csv ; echo ";TRANS_ID" >> original.csv ; tail -n+2 YouseePlay_stream_data.csv | awk -v RS='\r*\n' '{printf("%s;%d\n", $0, NR)}' >> original.csv
 `
 
 Move hashed_ID and TRANS_ID to the beginning of every line (preparation for sorting):
