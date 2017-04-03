@@ -11,8 +11,8 @@ from lda import get_account_topic_matrix
 from lda import get_topic_cluster_matrix
 from tqdm import tqdm
 
-guess_movies = False
-use_genre = False
+guess_movies = True
+use_genre = True
 
 def test_lda_on_clusters(train_file, test_file):
     train_matr, accounts = get_cluster_matrix(train_file)
@@ -85,7 +85,7 @@ def test_lda_on_genres(train_file, test_file):
     # Get map of movie probabilities with clusters
     clus_mov_map = get_cluster_movies_map(train_file, use_genre=True)
 
-    n_transactions = get_line_count(test_file) - 1
+    n_transactions = get_line_count(test_file)
     testset = get_data_file_pointer(test_file)
     guess_accuracy_sum = 0
     entries = 0
@@ -101,7 +101,7 @@ def test_lda_on_genres(train_file, test_file):
                 for i, t_p in enumerate(acc_top_matrix[u_hash]))
             
             # Additionally guess movie
-            if not guess_movies:
+            if guess_movies:
                 movie = trans['VM_TITLE']
                 if movie in clus_mov_map[genre]:
                     p *= clus_mov_map[genre][movie]
