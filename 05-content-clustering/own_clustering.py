@@ -2,6 +2,7 @@ import sys
 import numpy as np
 sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
+from common import get_line_count
 
 import csv
 from tqdm import tqdm
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     csvfile = get_data_file_pointer(sys.argv[1])
 
     print 'Creating the hashmaps for movies and accounts indexes'
-    for transact in tqdm(csvfile, total=805242):
+    for transact in tqdm(csvfile, total=get_line_count(sys.argv[1])):
         if transact['VM_TITLE'] not in movies:
             movies[transact['VM_TITLE']] = len(movies)
 
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     csvfile = get_data_file_pointer(sys.argv[1])
 
     print 'creating the rows and cols lists'
-    for transact in tqdm(csvfile, total=805242):
+    for transact in tqdm(csvfile, total=get_line_count(sys.argv[1])):
         col.append(movies[transact['VM_TITLE']])
         row.append(accounts[transact['hashed_ID']])
 
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         writer.writerow(fields)
         csvfile = get_data_file_pointer(sys.argv[1])
     
-        for entry in tqdm(csvfile, total=1771549):
+        for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
             entry['KMeans'] = labels[movies[entry['VM_TITLE']]]
     
             writer.writerow(map(lambda field: entry[field], fields))

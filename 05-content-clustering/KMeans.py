@@ -76,8 +76,14 @@ class KMeans(object):
         return 1 - ab / (aa * bb)
 
 
-    def _to_continue(self, old_centroids, new_centroids, iterations):
-        return iterations < 50  # TODO make something smarter
+    def _to_continue(self, labels, iterations):
+        count = 0
+        for i in xrange(len(labels)):
+            if self.labels[i] != labels[i]:
+                count += 1
+
+        print "{} points out of {} changed labels".format(count, len(labels))
+        return count > 0 and iterations < 50
 
     # clustering columns, a column is a movie
     def fit(self):
@@ -93,10 +99,12 @@ class KMeans(object):
 
         iterations = 0
         old_centroids = None
-        while self._to_continue(old_centroids, self.get_centroids(), iterations):
-            print iterations
+        old_labels = np.zeros(self.df.shape[1], dtype=int)
+        while self._to_continue(old_labels, iterations):
+            print 'starting iteration: {}'.format(iterations+1)
             iterations += 1
 
             old_centroids = self.centroids
+            old_labels = self.labels
             self.labels = self.get_labels()
             self.centroids = self.get_centroids()
