@@ -12,8 +12,6 @@ from scipy.sparse import coo_matrix
 from PIL import Image
 
 n_clusters = -1
-lda_max_iter = 10
-n_topics = 10
 min_topic_p = 0.05
 
 def get_cluster_matrix(filepath):
@@ -46,7 +44,7 @@ def get_cluster_matrix(filepath):
 
     ##### Sparse matrix
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
-    return (matr, accounts)
+    return (matr, accounts, range(0, n_clusters))
 
 def get_genre_matrix(filepath):
     csvfile = get_data_file_pointer(filepath)
@@ -65,6 +63,7 @@ def get_genre_matrix(filepath):
     n_clusters = len(genre_set)
     #print 'n_clusters ' + str(n_clusters)
 
+    genre_by_index = [genre for genre in genre_set]
     genre_indices = dict((genre, i) for i, genre in enumerate(genre_set))
 
     col = []
@@ -80,40 +79,70 @@ def get_genre_matrix(filepath):
 
     ##### Sparse matrix
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
-    return (matr, accounts, genre_indices)
+    return (matr, accounts, genre_by_index)
 
-def get_cluster_movies_map(filepath, use_genre=False):
+def get_user_movie_matrix(filepath):
+    # create the sparse matrix
+    n_trans = get_line_count(filepath)
     csvfile = get_data_file_pointer(filepath)
-    clusters = {}
-    clusters_count = {}
+    movies = {}
+    accounts = {}
+
+    # Create the hashmaps for movies and accounts indices
+    for transact in tqdm(csvfile, total=n_trans):
+        if transact['VM_TITLE'] not in movies:
+            movies[transact['VM_TITLE']] = len(movies)
+
+        if transact['hashed_ID'] not in accounts:
+            accounts[transact['hashed_ID']] = len(accounts)
+    col = []
+    row = []
+
+    csvfile = get_data_file_pointer(filepath)
+
+    # Create the rows and cols lists
+    for transact in tqdm(csvfile, total=n_trans):
+        col.append(movies[transact['VM_TITLE']])
+        row.append(accounts[transact['hashed_ID']])
+
+    matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))),
+        shape=(len(accounts), len(movies))) # should be a new sparse matrix
+
+    movie_by_index = [movie for movie in sorted(movies, key=movies.get)]
+    return matr, accounts, movie_by_index
+
+def get_term_movie_matrix(filepath, term_key):
+    csvfile = get_data_file_pointer(filepath)
+    terms = {}
+    terms_count = {}
 
     for trans in tqdm(csvfile, total=get_line_count(filepath)):
-        cluster = trans['VM_GENRE'] if use_genre else trans['KMeans']
+        term = trans[term_key]
         movie = trans['VM_TITLE']
 
         # Initialize/add movie list and count for cluster
-        if cluster not in clusters:
-            clusters[cluster] = {}
-            clusters_count[cluster] = 1
+        if term not in terms:
+            terms[term] = {}
+            terms_count[term] = 1
         else:
-            clusters_count[cluster] += 1
+            terms_count[term] += 1
         
         # Initialize/add movie's count in cluster
-        if movie not in clusters[cluster]:
-            clusters[cluster][movie] = 1
+        if movie not in terms[term]:
+            terms[term][movie] = 1
         else:
-            clusters[cluster][movie] += 1
+            terms[term][movie] += 1
     
     # Transform raw movie counts to movie probabilities within cluster
-    for cluster, movies in clusters.iteritems():
+    for term, movies in terms.iteritems():
         for movie, count in movies.iteritems():
-            clusters[cluster][movie] = float(count) / clusters_count[cluster]
+            terms[term][movie] = float(count) / terms_count[term]
 
-    return clusters
+    return terms
 
-def fit_and_get_lda(matrix):
+def fit_and_get_lda(matrix, n_topics, max_iter):
     lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1,
-        learning_method='batch', verbose=3, max_iter=lda_max_iter)
+        learning_method='batch', verbose=3, max_iter=max_iter)
     lda.fit(matrix)
     return lda
 
@@ -128,6 +157,13 @@ def get_topic_cluster_matrix(lda_components):
     for t_clusters in normalize(lda_components, axis=1, norm='l1'):
         top_clus_matr.append(t_clusters)
     return top_clus_matr
+
+def get_topic_term_matrix(lda_components, term_by_index):
+    norm_components = normalize(lda_components, axis=1, norm='l1')
+    top_term_matr = {}
+    for i, terms_dist in enumerate(norm_components):
+        top_term_matr[i] = dict((term, p) for term, p in zip(term_by_index, terms_dist))
+    return top_term_matr
 
 if __name__ == '__main__':
     ##### Construct account - cluster matrix

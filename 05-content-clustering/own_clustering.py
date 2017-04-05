@@ -26,7 +26,7 @@ if __name__ == '__main__':
             movies[transact['VM_TITLE']] = len(movies)
 
         if transact['hashed_ID'] not in accounts:
-	    accounts[transact['hashed_ID']] = len(accounts)
+            accounts[transact['hashed_ID']] = len(accounts)
     col = []
     row = []
 
