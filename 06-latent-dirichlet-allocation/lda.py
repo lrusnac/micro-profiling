@@ -10,6 +10,9 @@ from tqdm import tqdm
 from scipy.sparse import coo_matrix
 
 from PIL import Image
+import os
+import cPickle
+import md5
 
 n_clusters = -1
 min_topic_p = 0.05
@@ -141,10 +144,24 @@ def get_term_movie_matrix(filepath, term_key):
     return terms
 
 def fit_and_get_lda(matrix, n_topics, max_iter):
-    lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1,
-        learning_method='batch', verbose=3, max_iter=max_iter)
-    lda.fit(matrix)
-    return lda
+    file_data = '{}{}{}{}{}'.format(matrix.row.tolist(), matrix.col.tolist(), matrix.data.tolist(), n_topics, max_iter)
+
+    filename = md5.new(file_data).hexdigest()
+
+    if os.path.isfile(filename):
+        print 'load lda from file'
+        with open(filename, 'rb') as hf:
+            lda = cPickle.load(hf)
+
+        return lda
+    else:
+        print 'fit and save lda to file'
+        lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1,learning_method='batch', verbose=3, max_iter=max_iter)
+        lda.fit(matrix)
+
+        with open(filename, 'wb') as hf:
+            cPickle.dump(lda, hf)
+        return lda
 
 def get_account_topic_matrix(lda_transform, acc_by_index):
     acc_top_matr = {}
@@ -195,23 +212,6 @@ if __name__ == '__main__':
     ##### Print each cluster's importance in a topic if "cluster_p >= min_topic_p"
     # components = normalize(lda.components_, axis=1, norm='l1')
     # for topic in components:
-    #     clusters = []
-    #     for i in xrange(len(topic)):
-    #         cluster = topic[i]
-    #         if cluster >= min_topic_p:
-    #             clusters.append("{:>2}: {:>6.4f}".format(i, cluster))
-    #     print clusters
-
-    ##### Let's make a visualization
-    # img = Image.new('RGB', (n_clusters, len(components)), '#FFFFFF')
-    # for i in xrange(len(components)):
-    #     for j in xrange(n_clusters):
-    #         pixel = 255 - int(255 * components[i, j])
-    #         img.putpixel((j, i), (pixel, pixel, pixel))
-
-    # img.save('banana.png')
-
-
     ##### Test if lda output (transormed) and components_ can produce input matrix
     # for topic in transformed.dot(normalize(lda.components_, axis=1, norm='l1')):
         # print "{} {}".format(sum(topic), topic)
