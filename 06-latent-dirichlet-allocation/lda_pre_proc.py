@@ -54,7 +54,7 @@ def preprocess_on_original(filepath):
 
     out_filepath = '.'.join(filepath.split('.')[:-1]) + '_with_topics.csv'
     csvfile = get_data_file_pointer(filepath)
-    fields = csvfile.fieldnames + ['TOPIC']
+    fields = csvfile.fieldnames
     
     with open(out_filepath, 'w') as out_file:
         writer = csv.writer(out_file, delimiter=';')
@@ -73,7 +73,7 @@ def preprocess_on_original(filepath):
                     max_p = p
                     max_t = top_i
             
-            trans['TOPIC'] = max_t
+            trans['hashed_ID'] = account + '_' + str(max_t)
             writer.writerow(map(lambda field: trans[field], fields))
 
 
