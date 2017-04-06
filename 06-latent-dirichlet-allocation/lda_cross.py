@@ -12,6 +12,7 @@ from lda import get_topic_term_matrix
 from lda import get_user_movie_matrix
 from tqdm import tqdm
 import numpy
+import argparse
 
 guess_movies = False
 use_genre = True
@@ -124,10 +125,25 @@ def run_cross(train_matr, acc_by_index, term_by_index,
 
 
 if __name__ == '__main__':
-    test_lda_on_original(sys.argv[1], sys.argv[2])
-    # if use_genre:
-    #     test_lda_on_genres(sys.argv[1], sys.argv[2], guess_movies)
-    # else:
-    #     test_lda_on_clusters(sys.argv[1], sys.argv[2], guess_movies)
-    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('train')
+    parser.add_argument('test')
+    parser.add_argument('-n', '--topics', type=int, default=10, help='number of topics for lda')
+    parser.add_argument('-i', '--maxiter', type=int, default=10, help='max iterations for lda')
+    parser.add_argument('-t', '--term', choices=['genre', 'cluster', 'original'], default='original')
+    parser.add_argument('-p', '--predict', choices=['group', 'movie'], default='movie')
 
+    args = parser.parse_args()
+
+    movie = args.predict == 'movie'
+
+    if args.term == 'original':
+        test_lda_on_original(args.train, args.test)
+    elif args.term == 'genre':
+        test_lda_on_genres(args.train, args.test, movie)
+    else:
+        test_lda_on_clusters(args.train, args.test, movie)
+
+    
+    lda_max_iter = args.maxiter
+    n_topics = args.topics
