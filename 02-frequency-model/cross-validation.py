@@ -4,6 +4,7 @@ import math
 import sys
 sys.path.insert(0, '../00-common')
 from common import get_data_file_pointer
+from common import get_line_count
 from tqdm import tqdm
 
 counters = {}
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     rows_count = 0
     trainset = get_data_file_pointer(sys.argv[1])
     # count number of times movies appear
-    for entry in tqdm(trainset, total=1771549):
+    for entry in tqdm(trainset, total=get_line_count(sys.argv[1])):
         rows_count = rows_count + 1
         if entry['VM_TITLE'] not in counters:
             counters[entry['VM_TITLE']] = 0
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     testset = get_data_file_pointer(sys.argv[2])
     entry_count = 0
     guess_accuracy_sum = 0
-    for entry in tqdm(testset, total=805242):
+    for entry in tqdm(testset, total=get_line_count(sys.argv[2])):
         movie = entry['VM_TITLE']
         if movie in frequencies:
             guess_accuracy_sum = guess_accuracy_sum - math.log(frequencies[movie],2)
