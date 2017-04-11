@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
     clusters = {k:v/float(lines) for k,v in clusters.items()}
 
-    print clusters
-    print len(clusters)
+    # print clusters
+    # print len(clusters)
 
     csvfile = get_data_file_pointer(sys.argv[2])
     accuracy = 0

@@ -95,4 +95,4 @@ if __name__ == '__main__':
             zero_probability_rec += 1
 
     print guess_accuracy_sum / entry_count
-    print zero_probability_rec
+    print zero_probability_rec / float(entry_count)
