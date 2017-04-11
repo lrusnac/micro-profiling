@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 train_file=$(readlink -f $1)
 test_file=$(readlink -f $2)
 RED='\033[1;31m' # Start red color
@@ -15,6 +14,10 @@ python cross-validation.py $train_file $test_file
 echo ''
 
 # Genre model
+echo -e "${RED}Genre model base - guess movie${NC}"
+cd ../03-genre-model
+python base-model.py $train_file $test_file
+echo ''
 echo -e "${RED}Genre model - guess movie${NC}"
 cd ../03-genre-model
 python cross-validate.py $train_file $test_file
@@ -31,6 +34,10 @@ python cross-validate.py $train_file $test_file
 echo ''
 
 # Cluster model
+echo -e "${RED}Cluster model (40 clusters) base - guess movie${NC}"
+cd ../05-content-clustering
+python base-model.py $train_file $test_file
+echo ''
 echo -e "${RED}Cluster model (40 clusters) - guess movie${NC}"
 cd ../05-content-clustering
 python clustering_cross_validation.py $train_file $test_file
