@@ -1,0 +1,57 @@
+-e [1;31mFrequency model - guess movie[0m
+10.7172069672
+
+-e [1;31mGenre model base - guess movie[0m
+entropy: 3.51499248896
+loss: 0
+
+-e [1;31mGenre model - guess movie[0m
+### STATS ###
+Date: 2017-04-11 13:47:24.722731
+Script: micro-profiling/03-genre-model/cross-validate.py
+Data: /home/leo/development/micro-profiling/00-common/10p_clean_w_clusters_divided_sort_train.csv
+
+Entropy: 8.74370915299
+Loss: 0.401675257955
+
+-e [1;31mGenre model w/LDA (10 topics) - guess movie[0m
+fit and save lda to file
+Entropy: 10.0504318667
+Loss: 0
+
+-e [1;31mGenre-time model - guess movie[0m
+### STATS ###
+Date: 2017-04-11 13:48:30.052548
+Script: micro-profiling/04-time-model/cross-validate.py
+Data: /home/leo/development/micro-profiling/00-common/10p_clean_w_clusters_divided_sort_train.csv
+
+Entropy: 8.55274325782
+Loss: 0.581508173118
+
+-e [1;31mCluster model (40 clusters) base - guess movie[0m
+
+-e [1;31mCluster model (40 clusters) - guess movie[0m
+### STATS ###
+Date: 2017-04-11 13:48:44.199257
+Script: micro-profiling/05-content-clustering/clustering_cross_validation.py
+Data: /home/leo/development/micro-profiling/00-common/10p_clean_w_clusters_divided_sort_train.csv
+
+
+-e [1;31mCluster model (40 clusters) w/LDA (10 topics) - guess movie[0m
+
+-e [1;31mGenre model w/LDA (10 topics) - guess group[0m
+load lda from file
+Entropy: 4.33813474647
+Loss: 0
+
+-e [1;31mGenre model - guess group[0m
+### STATS ###
+Date: 2017-04-11 13:49:04.187936
+Script: micro-profiling/03-genre-model/genre_cross.py
+Data: /home/leo/development/micro-profiling/00-common/10p_clean_w_clusters_divided_sort_train.csv
+
+1.79315496485
+0.401675257955
+
+-e [1;31mCluster model (40 clusters) w/LDA (10 topics) - guess group[0m
+
