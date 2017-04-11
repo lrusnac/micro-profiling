@@ -14,9 +14,6 @@ from tqdm import tqdm
 import numpy
 import argparse
 
-guess_movies = False
-use_genre = True
-
 lda_max_iter = 20
 n_topics = 40
 
@@ -34,7 +31,8 @@ def test_lda_on_clusters(train_file, test_file, guess_movie=False):
         clus_by_index,
         test_file,
         'KMeans',
-        guess_movie=guess_movies)
+        guess_movie=guess_movie,
+        train_file_path=train_file)
 
 def test_lda_on_genres(train_file, test_file, guess_movie=False):
     train_matr, accounts, genre_by_index = get_genre_matrix(train_file)
@@ -50,7 +48,8 @@ def test_lda_on_genres(train_file, test_file, guess_movie=False):
         genre_by_index,
         test_file,
         'VM_GENRE',
-        guess_movie=guess_movies)
+        guess_movie=guess_movie,
+        train_file_path=train_file)
 
 def test_lda_on_original(train_file, test_file):
     # matr.sum_duplicates()
@@ -76,7 +75,7 @@ def test_lda_on_original(train_file, test_file):
 
 
 def run_cross(train_matr, acc_by_index, term_by_index,
-                test_file_path, term_key, guess_movie=False):
+                test_file_path, term_key, guess_movie=False, train_file_path=None):
     # Fit LDA
     lda = fit_and_get_lda(train_matr, n_topics, lda_max_iter)
     # Transform account-cluster matrix accoring to fitted LDA
@@ -86,7 +85,7 @@ def run_cross(train_matr, acc_by_index, term_by_index,
     # Get topic-cluster matrix from LDA components
     top_term_matr = get_topic_term_matrix(lda.components_, term_by_index)
 
-    term_movie_matr = get_term_movie_matrix(train_file, term_key) if guess_movie else None
+    term_movie_matr = get_term_movie_matrix(train_file_path, term_key) if guess_movie else None
     
     n_transactions = get_line_count(test_file_path)
     testset = get_data_file_pointer(test_file_path)
@@ -137,6 +136,9 @@ if __name__ == '__main__':
 
     movie = args.predict == 'movie'
 
+    lda_max_iter = args.maxiter
+    n_topics = args.topics
+
     if args.term == 'original':
         test_lda_on_original(args.train, args.test)
     elif args.term == 'genre':
@@ -145,5 +147,4 @@ if __name__ == '__main__':
         test_lda_on_clusters(args.train, args.test, movie)
 
     
-    lda_max_iter = args.maxiter
-    n_topics = args.topics
+    

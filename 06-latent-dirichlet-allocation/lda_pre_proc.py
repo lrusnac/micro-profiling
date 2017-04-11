@@ -52,7 +52,7 @@ def preprocess_on_original(filepath):
     #     print '{}: {}'.format(acc,
     #         ['{:>2d}: {:>5.3f}'.format(i, t) for i, t in tops.iteritems()])
 
-    out_filepath = '.'.join(filepath.split('.')[:-1]) + '_with_topics.csv'
+    out_filepath = '.'.join(filepath.split('.')[:-1]) + '_w_topics.csv'
     csvfile = get_data_file_pointer(filepath)
     fields = csvfile.fieldnames
     
