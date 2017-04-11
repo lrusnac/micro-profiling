@@ -17,7 +17,7 @@ previous_customer = ''
 def devide_and_write(train_writer, test_writer, stack):
     if len(stack) != 0:
         random.shuffle(stack)
-        division_point = int(len(stack)*dataset_division)
+        division_point = int(len(stack)*dataset_division + 0.5)
         write_list_to_csv(train_writer, stack[:division_point])
         write_list_to_csv(test_writer, stack[division_point:])
 
