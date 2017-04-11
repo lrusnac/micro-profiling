@@ -5,6 +5,7 @@ import random
 import sys
 
 from common import get_data_file_pointer
+from common import get_line_count
 
 # OUTFILEPATH = '10_percent_v01'
 
@@ -39,7 +40,7 @@ if __name__ == '__main__':
             train_writer = csv.writer(train, delimiter=';')
             train_writer.writerow(fields)
 
-            for entry in tqdm(csvfile, total=2576791):
+            for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
                 if previous_customer is not '' and entry['hashed_ID'] == previous_customer:
                     stack.append(entry)
                 else:
