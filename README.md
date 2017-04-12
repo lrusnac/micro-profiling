@@ -3,8 +3,8 @@ blah
 
 ## Evaluation
 We have some different datasets we have tested on (or rather different portions of the whole), with all transactions of tv-series pruned:
-1. Sorted by most active users we used transactions from 10% (80 to 90 percentiles). <a name="d1"></a>
-2. Sorted by most active users we used transactions from 10% (87 to 97 percentiles). The reason for the higher percentiles is due to the cleaning done to this set, i.e. identical movie-transactions appearing close together in time have been reduced to just one transaction. <a name="d2"></a>
+1. <a name="d1"></a> Sorted by most active users we used transactions from 10% (80 to 90 percentiles).
+2. <a name="d2"></a> Sorted by most active users we used transactions from 10% (87 to 97 percentiles). The reason for the higher percentiles is due to the cleaning done to this set, i.e. identical movie-transactions appearing close together in time have been reduced to just one transaction.
 
 ### Cross-validation using separate train and test sets
 #### Guessing individual movie
