@@ -27,11 +27,17 @@ if __name__ == '__main__':
 
     testset = get_data_file_pointer(sys.argv[2])
     entry_count = 0
+    loss_count = 0
     guess_accuracy_sum = 0
     for entry in tqdm(testset, total=get_line_count(sys.argv[2])):
         movie = entry['VM_TITLE']
         if movie in frequencies:
             guess_accuracy_sum = guess_accuracy_sum - math.log(frequencies[movie],2)
             entry_count = entry_count + 1
+        else:
+            loss_count += 1
 
-    print guess_accuracy_sum / entry_count
+
+    print 'entropy: {}'.format(guess_accuracy_sum / float(entry_count))
+    print 'loss: {}'.format(loss_count / float(loss_count + entry_count))
+    print 'loss_count: {}'.format(loss_count)
