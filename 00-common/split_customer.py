@@ -27,7 +27,7 @@ def hourToGroup(hour):
 
 if __name__ == '__main__':
     filepath = sys.argv[1]
-    out_filepath = '.'.join(filepath.split('/')[-1].split('.')[:-1]) + '_divided.csv'
+    out_filepath = '.'.join(filepath.split('/')[-1].split('.')[:-1]) + '_divided_by_time.csv'
 
     csvfile = get_data_file_pointer(filepath)
 
