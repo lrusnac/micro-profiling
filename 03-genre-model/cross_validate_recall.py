@@ -80,8 +80,8 @@ def addEntryMovie(movie, genre):
 
 def makeUserPredictions(user):
     predictions = {}
-    for genre_set, p_i in user_genre_ph_table[user].iteritems:
-        for movie, q_x in genre_movie_ph_table[genre_set].iteritems:
+    for genre_set, p_i in user_genre_ph_table[user].iteritems():
+        for movie, q_x in genre_movie_ph_table[genre_set].iteritems():
             # check if movie appears in several genre sets?
             predictions[movie] = p_i * q_x
     return sorted(predictions, key=predictions.get, reverse=True)
