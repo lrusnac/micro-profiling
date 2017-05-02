@@ -1,5 +1,4 @@
 # micro-profiling
-blah
 
 ## Evaluation
 We have some different datasets we have tested on (or rather different portions of the whole), with all transactions of tv-series pruned:
@@ -37,3 +36,16 @@ We have some different datasets we have tested on (or rather different portions 
 | Clustering (40 clusters)   | 10            | 2.26              | 2.48              |
 | Clustering (40 clusters)   | 30            | 2.37              |                   |
 | Clustering (40 clusters)   |               | 1.12              |                   |
+
+
+
+## Recall@k
+### 10p_clean_w_clusters_divided_sort (divided by time)
+
+| model | k=10 | k=20 | k=50|
+|---|---|---|---|
+|Frequency| 0.04763603727248128 | 0.08471325365560174 | 0.17278276206187915|
+|personalised genre| 0.10397630372757262| 0.16544945865636423| 0.2757338849610023|
+|LDA 10 topics (makes not much sense)| 0.12373954579187893| 0.20122276270695386| 0.3467353352162765|
+|LDA 40 topics (makes not much sense)| 0.152959307627251| 0.23796164019280827| 0.38611444113928295|
+
