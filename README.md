@@ -40,6 +40,17 @@ We have some different datasets we have tested on (or rather different portions 
 
 
 ## Recall@k
+
+### 10p_clean_w_clusters (no accounts division)
+| model | k=10 | k=20 | k=50|
+|---|---|---|---|
+|Frequency| 0.04268733806426925| 0.07817847410068222| 0.16544932762018003|
+|personalised genre| 0.10289447098300475| 0.1689393116100391| 0.29586199165923693|
+|LDA 10 topics| 0.11809149058873507| 0.19559071735379904| 0.34780468685834587|
+|LDA 40 topics| 0.14546553163219608| 0.23621379285292846| 0.4022641725785127|
+|LDA 100 topics| 0.157819953478631| 0.2529336200695389| 0.42488552632142723|
+_____________________________
+
 ### 10p_clean_w_clusters_divided_sort (divided by time)
 
 | model | k=10 | k=20 | k=50|
@@ -48,4 +59,13 @@ We have some different datasets we have tested on (or rather different portions 
 |personalised genre| 0.10397630372757262| 0.16544945865636423| 0.2757338849610023|
 |LDA 10 topics (makes not much sense)| 0.12373954579187893| 0.20122276270695386| 0.3467353352162765|
 |LDA 40 topics (makes not much sense)| 0.152959307627251| 0.23796164019280827| 0.38611444113928295|
+
+### 10p_clean_w_clusters_w_topics (divided by LDA 40 topics)
+| model | k=10 | k=20 | k=50|
+|---|---|---|---|
+|Frequency| 0.04074010348996031| 0.07770936270343574| 0.16497236262785778|
+|personalised genre| 0.15483145267522289| 0.23792093136739675| 0.3762470203178532|
+
+
+
 
