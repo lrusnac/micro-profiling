@@ -63,7 +63,6 @@ def build_model(train_file):
 
     global ordered_movies
     ordered_movies, _ = zip(*sorted(frequencies.items(), key=lambda x: x[1], reverse=True))
-    print ordered_movies
 
 if __name__ == '__main__':
     train_file = sys.argv[1]
