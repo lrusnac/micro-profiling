@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+    stroke: steelblue;
+    stroke-width: 1;
+    fill: none;
+}
+
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangePoints([30, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var line = d3.svg.line().interpolate("linear")//.curve(d3.curveBasis)
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
+
+d3.csv("recall.csv", function(error, data) {
+  if (error) throw error;
+
+    var models = d3.map(data, function(d){return d.Model;}).keys();
+    var distinctk = d3.map(data, function(d){return d.K;}).keys();
+
+    var ks = []
+
+    distinctk.forEach(function(k) {
+        ks.push({
+            k: k,
+            values: data.filter(function(d) { return d.K == k}).map(function(d) {return {y: parseFloat(d.Value), x: d.Model};})
+        })
+    })
+
+
+    x.domain(d3.map(data, function(d){return d.Model;}).keys());
+    y.domain(d3.extent(data, function(d) { return parseFloat(d.Value); })).nice();
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+    //   .append("text")
+    //     .attr("class", "label")
+    //     .attr("x", width)
+    //     .attr("y", -6)
+    //     .style("text-anchor", "end")
+    //     .text("Views");
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Recall");
+
+    svg.selectAll(".dot")
+        .data(data)
+      .enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 3.5)
+        .attr("cx", function(d) { return x(d.Model); })
+        .attr("cy", function(d) { return y(d.Value); })
+        .style("fill", function(d) { return color("k=" + d.K); });
+
+    var lines = svg.selectAll(".lines")
+        .data(ks)
+        .enter().append("g")
+          .attr("class", "lines");
+
+      lines.append("path")
+          .attr("class", "line")
+          .attr("d", function(d) { return line(d.values); })
+          .style("stroke", function(d) { return color("k=" + d.k); });
+
+
+
+
+    var legend = svg.selectAll(".legend")
+        .data(color.domain())
+      .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    var legendPos = 90;//= width - 18;
+
+    legend.append("rect")
+        .attr("x", legendPos)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .attr("x", legendPos-6)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d; });
+});
+</script>
