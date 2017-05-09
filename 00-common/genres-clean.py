@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
         for entry in tqdm(csvfile, total=2576791):
             genres = entry['VM_GENRE']
-            if 'Erotik' in genres or 'European' in genres or 'Amateur' in genres or 'Nordic' in genres:
+            if 'Erotik' in genres or 'European' in genres or 'Amateur' in genres or 'Nordic' in genres or 'anal' in genres:
                 entry['VM_GENRE'] = 'adult'
             else:
                 genres = genres.lower().split(',')
