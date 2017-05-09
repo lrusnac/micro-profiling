@@ -26,20 +26,23 @@ def compute_recall(account, k=20):
     customer = account[0]['hashed_ID']
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
+    # print term_movie_matr
+
     # select the row for customer
     # compute the probability of each movie to be predicted
     #       and get the top k that the user didn't see yet
 
     cluster_predictions = train_transform[accounts[customer]].dot(lda.components_)
-    # this will give me only clusters so need to moltiply with movies frequencies for each cluster and then get the top k
+    # this will give me only clusters so need to multiply with movies frequencies for each cluster and then get the top k
 
     # combine predictions with term_movie_matr
     movie_by_index = []
     predictions = []
     for cluster in clus_by_index:
-        for movie in term_movie_matr[cluster]:
+        str_cluster = str(cluster)
+        for movie in term_movie_matr[str_cluster]:
             movie_by_index.append(movie)
-            predictions.append(term_movie_matr[cluster][movie] / cluster_predictions[cluster])
+            predictions.append(term_movie_matr[str_cluster][movie] * cluster_predictions[cluster])
 
     selected_k = np.argpartition(predictions, -k)[-k:]
 
@@ -103,7 +106,7 @@ if __name__ == '__main__':
     top_term_matr = get_topic_term_matrix(lda.components_, clus_by_index)
 
     # get movie frequencies inside each group
-    term_movie_matr = get_term_movie_matrix(train_file, term_key='KMeans')
+    term_movie_matr = get_term_movie_matrix(train_file, term_key='KMeans100')
 
     results = metrics_evaluater(test_file, metric_agregator)
     print [sum(y) / len(y) for y in zip(*results)]

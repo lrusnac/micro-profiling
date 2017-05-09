@@ -28,8 +28,8 @@ def get_cluster_matrix(filepath):
         if transact['hashed_ID'] not in accounts:
             accounts[transact['hashed_ID']] = len(accounts)
 
-        if int(transact['KMeans']) > n_clusters:
-            n_clusters = int(transact['KMeans'])
+        if int(transact['KMeans100']) > n_clusters:
+            n_clusters = int(transact['KMeans100'])
 
     n_clusters += 1
     #print 'n_clusters ' + str(n_clusters)
@@ -43,7 +43,7 @@ def get_cluster_matrix(filepath):
     #print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=get_line_count(filepath)):
         row.append(accounts[transact['hashed_ID']])
-        col.append(int(transact['KMeans']))
+        col.append(int(transact['KMeans100']))
 
     ##### Sparse matrix
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
