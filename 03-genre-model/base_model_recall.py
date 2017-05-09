@@ -30,7 +30,7 @@ def compute_recall(account, k=20):
     for genre in genres:
         genre_k = int(round(genres[genre] / float(len(account)) * k))
 
-        k_movie_set |= sorted(genre_movie_ph_table[genres[genre]], key=genre_movie_ph_table[genres[genre]].get, reverse=True)[:genre_k]
+        k_movie_set |= set(sorted(genre_movie_ph_table[genres[genre]], key=genre_movie_ph_table[genres[genre]].get, reverse=True)[:genre_k])
 
     return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
 
