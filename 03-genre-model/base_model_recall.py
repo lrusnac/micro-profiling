@@ -20,17 +20,20 @@ def compute_recall(account, k=20):
     customer = account[0]['hashed_ID']
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
-    genres = {}
-    for transaction in account:
-        if transaction['VM_GENRE'] not in genres:
-            genres[transaction['VM_GENRE']] = 0
-        genres[transaction['VM_GENRE']] += 1
-
     k_movie_set = set()
-    for genre in genres:
-        genre_k = int(round(genres[genre] / float(len(account)) * k))
+    for genre in user_genre_ph_table[customer]:
+        genre_k = int(round(user_genre_ph_table[customer][genre] * k))
 
-        k_movie_set |= set(sorted(genre_movie_ph_table[genres[genre]], key=genre_movie_ph_table[genres[genre]].get, reverse=True)[:genre_k])
+        k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
+
+    # print "-----"
+    # if k != len(k_movie_set):
+        # print 'K: {}, kset: {}'.format(k, len(k_movie_set))
+
+    # K: 10, kset: 6
+    # if k==10 and len(k_movie_set) == 6:
+        # print genres
+        # print k_movie_set
 
     return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
 
