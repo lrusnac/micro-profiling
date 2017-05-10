@@ -55,7 +55,7 @@ var line = d3.svg.line().interpolate("linear")//.curve(d3.curveBasis)
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); });
 
-d3.csv("recall.csv", function(error, data) {
+d3.csv("data/lda-topics.csv", function(error, data) {
   if (error) throw error;
 
     var models = d3.map(data, function(d){return d.Model;}).keys();
@@ -78,12 +78,12 @@ d3.csv("recall.csv", function(error, data) {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
-    //   .append("text")
-    //     .attr("class", "label")
-    //     .attr("x", width)
-    //     .attr("y", -6)
-    //     .style("text-anchor", "end")
-    //     .text("Views");
+      .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", -6)
+        .style("text-anchor", "end")
+        .text("Topics");
 
     svg.append("g")
         .attr("class", "y axis")
