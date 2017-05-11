@@ -86,7 +86,7 @@ def build_model(train_file):
             genre_movie_ph_table[genre][w] = f
 
     global k_movie_set
-    for genre in user_genre_ph_table[customer]:
+    for genre in counters.keys():
         genre_k = int(round(freq[genre] * k))
 
         k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
