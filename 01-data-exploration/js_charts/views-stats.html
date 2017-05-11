@@ -3,7 +3,7 @@
 <style>
 
 body {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 
 .axis path,
@@ -19,13 +19,9 @@ body {
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
+var margin = {top: 20, right: 30, bottom: 30, left: 60},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-
-var superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹",
-    formatPower = function(d) { return (d + "").split("").map(function(c) { return superscript[c]; }).join(""); };
-
 
 var x = d3.scale.log().base(10)
     .range([0, width]);
@@ -70,6 +66,7 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("class", "label")
       .attr("x", width)
       .attr("y", -6)
+      .attr("font-size", 14)
       .style("text-anchor", "end")
       .text("Views");
 
@@ -81,8 +78,9 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
+      .attr("font-size", 14)
       .style("text-anchor", "end")
-      .text("Users");
+      .text("Accounts");
 
   svg.selectAll(".dot2")
       .data(data)
@@ -91,7 +89,7 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("r", 3.5)
       .attr("cx", function(d) { return x(d.Views_original); })
       .attr("cy", function(d) { return y(d.Users_original); })
-      .style("fill", function(d) { return color("Original users"); });
+      .style("fill", function(d) { return color("Original accounts"); });
 
   svg.selectAll(".dot")
       .data(data)
@@ -100,26 +98,39 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("r", 3.5)
       .attr("cx", function(d) { return x(d.Views_clean); })
       .attr("cy", function(d) { return y(d.Users_clean); })
-      .style("fill", function(d) { return color("Clean users"); });
+      .style("fill", function(d) { return color("Clean accounts"); })
+      .attr("display", function(d) { return d.Views_clean == '' ? "none": ""; });
+
+  svg.append("rect")
+    .attr("x", x(24))
+    .attr("y", y(10000))
+    .attr("width", x(79)-x(24))
+    .attr("height", y(200) - y(10000))
+    .style("fill", "none")
+    .style("stroke", color("Clean accounts"));
 
   var legend = svg.selectAll(".legend")
       .data(color.domain())
     .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
 
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
+      var legendPos = width - 18;
 
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; });
+      legend.append("rect")
+          .attr("x", legendPos)
+          .attr("width", 29)
+          .attr("height", 29)
+          .attr("fill", color);
+
+      legend.append("text")
+          .attr("x", legendPos-7)
+          .attr("y", 14.5)
+          .attr("dy", "0.32em")
+          .attr("font-family", "sans-serif")
+          .attr("font-size", 18)
+          .attr("text-anchor", "end")
+          .text(function(d) { return d; });
 
 });
 

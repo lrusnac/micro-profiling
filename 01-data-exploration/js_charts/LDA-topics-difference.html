@@ -29,8 +29,8 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal()
-    .rangePoints([30, width]);
+var x = d3.scale.linear()
+    .range([0, width]);
 
 var y = d3.scale.linear()
     .range([height, 0]);
@@ -51,7 +51,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var line = d3.svg.line().interpolate("linear")//.curve(d3.curveBasis)
+var line = d3.svg.line().interpolate("cardinal")//.curve(d3.curveBasis)
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); });
 
@@ -66,12 +66,13 @@ d3.csv("data/lda-topics.csv", function(error, data) {
     distinctk.forEach(function(k) {
         ks.push({
             k: k,
-            values: data.filter(function(d) { return d.K == k}).map(function(d) {return {y: parseFloat(d.Value), x: d.Model};})
+            values: data.filter(function(d) { return d.K == k}).map(function(d) {return {y: parseFloat(d.Value), x: parseInt(d.Model)};})
         })
     })
 
 
-    x.domain(d3.map(data, function(d){return d.Model;}).keys());
+    // x.domain(d3.map(data, function(d){return d.Model;}).keys());
+    x.domain(d3.extent(data, function(d) { return parseInt(d.Model); })).nice();
     y.domain(d3.extent(data, function(d) { return parseFloat(d.Value); })).nice();
 
     svg.append("g")
@@ -83,7 +84,7 @@ d3.csv("data/lda-topics.csv", function(error, data) {
         .attr("x", width)
         .attr("y", -6)
         .style("text-anchor", "end")
-        .text("Topics");
+        .text("LDA Topics");
 
     svg.append("g")
         .attr("class", "y axis")
@@ -94,14 +95,14 @@ d3.csv("data/lda-topics.csv", function(error, data) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Recall");
+        .text("Recall@k");
 
     svg.selectAll(".dot")
         .data(data)
       .enter().append("circle")
         .attr("class", "dot")
         .attr("r", 3.5)
-        .attr("cx", function(d) { return x(d.Model); })
+        .attr("cx", function(d) { return x(parseInt(d.Model)); })
         .attr("cy", function(d) { return y(d.Value); })
         .style("fill", function(d) { return color("k=" + d.K); });
 
