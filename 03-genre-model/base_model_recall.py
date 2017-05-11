@@ -15,18 +15,16 @@ internal_genre_counter = {}
 
 freq = {}
 
+k_sets = {}
+ks = [10, 20, 50]
+
 def compute_recall(account, k=20):
     # accounts ==== all the transactions of one user, must not be empty
     customer = account[0]['hashed_ID']
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
-    k_movie_set = set()
-    for genre in counters.keys():
-        genre_k = int(round(freq[genre] * k))
 
-        k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
-
-    return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
+    return len(relevant_docs & k_set[k]) / float(len(relevant_docs))
 
 def metric_agregator(account):
     return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
@@ -92,8 +90,14 @@ def build_model(train_file):
             f = genre_values[w]/float(internal_genre_counter[genre])
             genre_movie_ph_table[genre][w] = f
 
+    for k in ks:
+        k_movie_set = set()
+        for genre in counters.keys():
+            genre_k = int(round(freq[genre] * k))
 
+            k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
 
+        ks[k] = k_movie_set
 
 if __name__ == '__main__':
     train_file = sys.argv[1]
