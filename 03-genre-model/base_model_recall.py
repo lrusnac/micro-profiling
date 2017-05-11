@@ -76,7 +76,7 @@ def build_model(train_file):
     # compute the genre distribution
     freq = {}
     total = sum(counters.values())
-    for genre in counters.iteritems():
+    for genre in counters.keys():
         freq[genre] = counters[genre]/float(total)
 
     # compute the genre_movie_ph_table
