@@ -7,33 +7,18 @@ from common import get_line_count
 from tqdm import tqdm
 import numpy
 
-user_genre = {}
-user_genre_ph_table = {}
-internal_user_counters = {}
+counters = {}
 
 genre_movie = {}
 genre_movie_ph_table = {}
 internal_genre_counter = {}
 
+k_movie_set = set()
+
 def compute_recall(account, k=20):
     # accounts ==== all the transactions of one user, must not be empty
     customer = account[0]['hashed_ID']
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
-
-    k_movie_set = set()
-    for genre in user_genre_ph_table[customer]:
-        genre_k = int(round(user_genre_ph_table[customer][genre] * k))
-
-        k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
-
-    # print "-----"
-    # if k != len(k_movie_set):
-        # print 'K: {}, kset: {}'.format(k, len(k_movie_set))
-
-    # K: 10, kset: 6
-    # if k==10 and len(k_movie_set) == 6:
-        # print genres
-        # print k_movie_set
 
     return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
 
@@ -60,19 +45,11 @@ def metrics_evaluater(filepath, metrics):
     result_list.append(metrics(account))
     return result_list
 
-def addEntryGenre(user, genre):
-    if user not in user_genre:
-        user_genre[user] = {}
-        user_genre_ph_table[user] = {}
+def addEntryGenre(genre):
+    if genre not in counters:
+        counters[genre] = 0
 
-    if genre not in user_genre[user]:
-        user_genre[user][genre] = 0
-
-    user_genre[user][genre] = user_genre[user][genre] + 1
-
-    if user not in internal_user_counters:
-        internal_user_counters[user] = 0
-    internal_user_counters[user] = internal_user_counters[user] + 1
+    counters[genre] = counters[genre] + 1
 
 def addEntryMovie(movie, genre):
     if genre not in genre_movie:
@@ -93,20 +70,27 @@ def build_model(train_file):
     trainset = get_data_file_pointer(train_file, True)
     for entry in tqdm(trainset, total=get_line_count(train_file)):
         user = entry['hashed_ID']
-        addEntryGenre(user, entry['VM_GENRE'])
+        addEntryGenre(entry['VM_GENRE'])
         addEntryMovie(entry['VM_TITLE'], entry['VM_GENRE'])
 
-    # compute the user_genre_ph_table
-    for user, genres in user_genre.iteritems():
-        for g in genres:
-            f = genres[g]/float(internal_user_counters[user])
-            user_genre_ph_table[user][g] = f
+    # compute the genre distribution
+    freq = {}
+    total = sum(counters.values())
+    for genre in counters.iteritems():
+        freq[genre] = counters[genre]/float(total)
 
     # compute the genre_movie_ph_table
     for genre, genre_values in genre_movie.iteritems():
         for w in genre_values:
             f = genre_values[w]/float(internal_genre_counter[genre])
             genre_movie_ph_table[genre][w] = f
+
+    global k_movie_set
+    for genre in user_genre_ph_table[customer]:
+        genre_k = int(round(freq[genre] * k))
+
+        k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
+
 
 if __name__ == '__main__':
     train_file = sys.argv[1]

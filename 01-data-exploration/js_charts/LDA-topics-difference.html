@@ -75,6 +75,11 @@ d3.csv("data/lda-topics.csv", function(error, data) {
     x.domain(d3.extent(data, function(d) { return parseInt(d.Model); })).nice();
     y.domain(d3.extent(data, function(d) { return parseFloat(d.Value); })).nice();
 
+    xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .tickValues(d3.map(data, function(d){return d.Model;}).keys().map(function(c) {return parseInt(c);}));
+
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
