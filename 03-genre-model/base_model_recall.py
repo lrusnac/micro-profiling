@@ -24,7 +24,7 @@ def compute_recall(account, k=20):
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
 
-    return len(relevant_docs & k_set[k]) / float(len(relevant_docs))
+    return len(relevant_docs & k_sets[k]) / float(len(relevant_docs))
 
 def metric_agregator(account):
     return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
@@ -97,7 +97,7 @@ def build_model(train_file):
 
             k_movie_set |= set(sorted(genre_movie_ph_table[genre], key=genre_movie_ph_table[genre].get, reverse=True)[:genre_k])
 
-        ks[k] = k_movie_set
+        k_sets[k] = k_movie_set
 
 if __name__ == '__main__':
     train_file = sys.argv[1]
