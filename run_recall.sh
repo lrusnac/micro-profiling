@@ -7,7 +7,7 @@ dataset=$(basename "$fulldataset")
 fulldatasetnofilename="${dataset%.*}"
 
 train=$fulldatasetnofilename'_train.csv'
-trainc=$fulldatasetnofilename'_train_clusters.csv'
+trainc='clustered_40_clusters.csv'
 test=$fulldatasetnofilename'_test.csv'
 
 cd 00-common
@@ -20,6 +20,7 @@ do
 
     echo '[INFO] cluster the train dataset'
     python ../05-content-clustering/own_clustering.py $train
+    rm $train
 
     echo '[INFO] frequency model'
     python ../02-frequency-model/freq_recall.py $trainc $test
@@ -33,6 +34,5 @@ do
     python ../06-latent-dirichlet-allocation/lda_w_clustering_recall.py $trainc $test
     echo '[INFO] removing train and test datasets'
     rm $trainc
-    rm $train
     rm $test
 done
