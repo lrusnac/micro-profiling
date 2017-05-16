@@ -3,8 +3,8 @@
 PHYS_DIR=`pwd -P`
 fulldataset=$PHYS_DIR/$1
 
-dataset=$(basename '$fulldataset')
-fulldatasetnofilename='${dataset%.*}'
+dataset=$(basename "$fulldataset")
+fulldatasetnofilename="${dataset%.*}"
 
 train=$fulldatasetnofilename'_train.csv'
 trainc=$fulldatasetnofilename'_train_clusters.csv'
