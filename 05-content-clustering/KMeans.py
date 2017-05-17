@@ -48,11 +48,11 @@ class KMeans(object):
         # for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
         #     labels[i] = findClosestCentroid(i, self.df.getcol(i), self.centroids, self.distance)
 
-        labels = Parallel(n_jobs=self.num_cores)(delayed(self.findClosestCentroid)(i, self.df.getcol(i), self.centroids, self.distance) for i in tqdm(xrange(self.df.shape[1])))
+        labels = Parallel(n_jobs=self.num_cores)(delayed(self.findClosestCentroid)(i, self.df.getcol(i), self.centroids) for i in tqdm(xrange(self.df.shape[1])))
 
         return labels
 
-    def findClosestCentroid(i, point, centroids, distance):
+    def findClosestCentroid(i, point, centroids):
         min_distance = 100
         closest_centroid = -1
 
@@ -60,7 +60,18 @@ class KMeans(object):
         for j in xrange(centroids.shape[1]):
             centroid = centroids.getcol(j)
 
-            dist = distance(point, centroid, i, j)
+            # dist = distance(point, centroid, i, j)
+
+            ab = (point.transpose()).dot(centroid)[0,0]
+            dist = -1
+            if ab == 0:
+                dist = 1
+            else:
+                aa = self._precomputed_squared_points[i]
+                bb = self._precomputed_squared_centroids[j]
+
+                dist = 1 - ab / (aa * bb)
+
             if dist < min_distance:
                 closest_centroid = j
                 min_distance = dist
