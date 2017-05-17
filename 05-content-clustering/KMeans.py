@@ -5,6 +5,8 @@ from scipy.sparse import csc_matrix
 import random
 import math
 
+import sys
+
 from joblib import Parallel, delayed
 import multiprocessing
 
@@ -102,8 +104,8 @@ class KMeans(object):
             if self.labels[i] != labels[i]:
                 count += 1
 
-        # print "{} points out of {} changed labels".format(count, len(labels))
-        return count > 0 and iterations < 50
+        sys.stderr.write("{} points out of {} changed labels\n".format(count, len(labels)))
+        return count > 5 and iterations < 50
 
     # clustering columns, a column is a movie
     def fit(self):
