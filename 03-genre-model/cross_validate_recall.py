@@ -91,7 +91,7 @@ def makeUserPredictions(user):
     return sorted(predictions, key=predictions.get, reverse=True)
 
 def build_model(train_file):
-    trainset = get_data_file_pointer(train_file, True)
+    trainset = get_data_file_pointer(train_file, False)
     for entry in tqdm(trainset, total=get_line_count(train_file)):
         user = entry['hashed_ID']
         addEntryGenre(user, entry['VM_GENRE'])

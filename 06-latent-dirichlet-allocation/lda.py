@@ -149,13 +149,13 @@ def fit_and_get_lda(matrix, n_topics, max_iter):
     filename = md5.new(file_data).hexdigest()
 
     if os.path.isfile(filename):
-        print 'load lda from file'
+        # print 'load lda from file'
         with open(filename, 'rb') as hf:
             lda = cPickle.load(hf)
 
         return lda
     else:
-        print 'fit and save lda to file'
+        # print 'fit and save lda to file'
         lda = dec.LatentDirichletAllocation(n_topics=n_topics, n_jobs=-1,learning_method='batch', verbose=3, max_iter=max_iter)
         lda.fit(matrix)
 

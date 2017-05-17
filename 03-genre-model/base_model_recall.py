@@ -78,7 +78,7 @@ def addEntryMovie(movie, genre):
     internal_genre_counter[genre] = internal_genre_counter[genre] + 1
 
 def build_model(train_file):
-    trainset = get_data_file_pointer(train_file, True)
+    trainset = get_data_file_pointer(train_file, False)
     for entry in tqdm(trainset, total=get_line_count(train_file)):
         user = entry['hashed_ID']
         addEntryGenre(entry['VM_GENRE'])

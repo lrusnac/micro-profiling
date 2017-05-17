@@ -100,7 +100,7 @@ if __name__ == '__main__':
     top_term_matr = get_topic_term_matrix(lda.components_, clus_by_index)
 
     # get movie frequencies inside each group
-    term_movie_matr = get_term_movie_matrix(train_file, term_key='KMeans100')
+    term_movie_matr = get_term_movie_matrix(train_file, term_key='KMeans')
 
     results = metrics_evaluater(test_file, metric_agregator)
     print [sum(y) / len(y) for y in zip(*results)]

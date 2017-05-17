@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # create the sparse matrix
     csvfile = get_data_file_pointer(sys.argv[1])
 
-    print 'Creating the hashmaps for movies and accounts indexes'
+    # print 'Creating the hashmaps for movies and accounts indexes'
     for transact in tqdm(csvfile, total=get_line_count(sys.argv[1])):
         if transact['VM_TITLE'] not in movies:
             movies[transact['VM_TITLE']] = len(movies)
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     csvfile = get_data_file_pointer(sys.argv[1])
 
-    print 'creating the rows and cols lists'
+    # print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=get_line_count(sys.argv[1])):
         col.append(movies[transact['VM_TITLE']])
         row.append(accounts[transact['hashed_ID']])
@@ -41,16 +41,16 @@ if __name__ == '__main__':
     # add 1 to the movie,account coordinates
     matr.sum_duplicates()
     matr.data = np.ones(len(matr.col))
-    print matr.shape
+    # print matr.shape
 
-    print 'number of movies: ' + str(len(movies))
-    print 'number of accounts: ' + str(len(accounts))
+    # print 'number of movies: ' + str(len(movies))
+    # print 'number of accounts: ' + str(len(accounts))
 
     # print dataset
     kmeans = KMeans(matr, num_clusters)
     kmeans.fit()
     labels =  kmeans.labels
-    print labels
+    # print labels
 
     # merge dataset with labels and do the cross validation as we do with genres
     # save new col as 'KMeans'
@@ -62,8 +62,8 @@ if __name__ == '__main__':
         writer = csv.writer(output, delimiter=';')
         writer.writerow(fields)
         csvfile = get_data_file_pointer(sys.argv[1])
-    
+
         for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
             entry['KMeans'] = labels[movies[entry['VM_TITLE']]]
-    
+
             writer.writerow(map(lambda field: entry[field], fields))
