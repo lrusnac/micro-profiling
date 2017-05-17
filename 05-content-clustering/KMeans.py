@@ -48,7 +48,7 @@ class KMeans(object):
         # for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
         #     labels[i] = findClosestCentroid(i, self.df.getcol(i), self.centroids, self.distance)
 
-        labels = Parallel(n_jobs=self.num_cores)(delayed(findClosestCentroid)(i, self.df.getcol(i), self.centroids, self.distance) for i in tqdm(xrange(self.df.shape[1])))
+        labels = Parallel(n_jobs=self.num_cores)(delayed(self.findClosestCentroid)(i, self.df.getcol(i), self.centroids, self.distance) for i in tqdm(xrange(self.df.shape[1])))
 
         return labels
 
