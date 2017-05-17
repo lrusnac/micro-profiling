@@ -8,6 +8,35 @@ import math
 from joblib import Parallel, delayed
 import multiprocessing
 
+def findClosestCentroid(i, point, centroids, _precomputed_squared_points, _precomputed_squared_centroids):
+    min_distance = 100
+    closest_centroid = -1
+
+    # going through all centroids
+    for j in xrange(centroids.shape[1]):
+        centroid = centroids.getcol(j)
+
+        # dist = distance(point, centroid, i, j)
+
+        ab = (point.transpose()).dot(centroid)[0,0]
+        dist = -1
+        if ab == 0:
+            dist = 1
+        else:
+            aa = _precomputed_squared_points[i]
+            bb = _precomputed_squared_centroids[j]
+
+            dist = 1 - ab / (aa * bb)
+
+        if dist < min_distance:
+            closest_centroid = j
+            min_distance = dist
+
+    if closest_centroid == -1:
+        print 'something wrong happened in finding the closest_centroid'
+
+    return closest_centroid
+
 class KMeans(object):
     def __init__(self, df, n_clusters):
         self.df = df.tocsc()  # np sparce matrix
@@ -48,38 +77,10 @@ class KMeans(object):
         # for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
         #     labels[i] = findClosestCentroid(i, self.df.getcol(i), self.centroids, self.distance)
 
-        labels = Parallel(n_jobs=self.num_cores)(delayed(self.findClosestCentroid)(i, self.df.getcol(i), self.centroids, self._precomputed_squared_points, self._precomputed_squared_centroids) for i in tqdm(xrange(self.df.shape[1])))
+        labels = Parallel(n_jobs=self.num_cores)(delayed(findClosestCentroid)(i, self.df.getcol(i), self.centroids, self._precomputed_squared_points, self._precomputed_squared_centroids) for i in tqdm(xrange(self.df.shape[1])))
 
         return labels
 
-    def findClosestCentroid(i, point, centroids, _precomputed_squared_points, _precomputed_squared_centroids):
-        min_distance = 100
-        closest_centroid = -1
-
-        # going through all centroids
-        for j in xrange(centroids.shape[1]):
-            centroid = centroids.getcol(j)
-
-            # dist = distance(point, centroid, i, j)
-
-            ab = (point.transpose()).dot(centroid)[0,0]
-            dist = -1
-            if ab == 0:
-                dist = 1
-            else:
-                aa = _precomputed_squared_points[i]
-                bb = _precomputed_squared_centroids[j]
-
-                dist = 1 - ab / (aa * bb)
-
-            if dist < min_distance:
-                closest_centroid = j
-                min_distance = dist
-
-        if closest_centroid == -1:
-            print 'something wrong happened in finding the closest_centroid'
-
-        return closest_centroid
 
     def distance(self, p1, p2, i, j):
         ab = (p1.transpose()).dot(p2)[0,0]
