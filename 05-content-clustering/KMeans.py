@@ -79,7 +79,7 @@ class KMeans(object):
 
         labels = Parallel(n_jobs=self.num_cores)(delayed(findClosestCentroid)(i, self.df.getcol(i), self.centroids, self._precomputed_squared_points, self._precomputed_squared_centroids) for i in tqdm(xrange(self.df.shape[1])))
 
-        return labels
+        return np.array(labels)
 
 
     def distance(self, p1, p2, i, j):
