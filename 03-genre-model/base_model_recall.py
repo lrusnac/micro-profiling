@@ -26,8 +26,15 @@ def compute_recall(account, k=20):
 
     return len(relevant_docs & k_sets[k]) / float(len(relevant_docs))
 
+def compute_precision(account, k=20):
+    # accounts ==== all the transactions of one user, must not be empty
+    customer = account[0]['hashed_ID']
+    relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
+
+    return len(relevant_docs & k_sets[k]) / float(k)
+
 def metric_agregator(account):
-    return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
+    return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50), compute_precision(account, 10), compute_precision(account, 20), compute_precision(account, 50))
 
 def metrics_evaluater(filepath, metrics):
     account = []

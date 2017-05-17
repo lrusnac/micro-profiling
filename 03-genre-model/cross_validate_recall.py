@@ -15,19 +15,23 @@ genre_movie = {}
 genre_movie_ph_table = {}
 internal_genre_counter = {}
 
-def compute_recall(account, k=20):
-    # accounts ==== all the transactions of one user, must not be empty
-    customer = account[0]['hashed_ID']
+def compute_recall(account, predictions, k=20):
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
-    k_movie_set = set(makeUserPredictions(customer)[:k])
-    # make k predictions for each account
-    #   |relevant docs intersect retrieved docs| / |relevant docs|
+    k_movie_set = set(predictions[:k])
 
     return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
 
+def compute_precision(account, predictions, k=20):
+    relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
+
+    k_movie_set = set(predictions[:k])
+
+    return len(relevant_docs & k_movie_set) / float(k)
+
 def metric_agregator(account):
-    return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
+    predictions = makeUserPredictions(account[0]['hashed_ID'])
+    return (compute_recall(account, predictions, 10), compute_recall(account, predictions, 20), compute_recall(account, predictions, 50), compute_precision(account, predictions, 10), compute_precision(account, predictions, 20), compute_precision(account, predictions, 50))
 
 def metrics_evaluater(filepath, metrics):
     account = []

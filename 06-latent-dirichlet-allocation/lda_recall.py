@@ -20,26 +20,24 @@ train_transform = None
 accounts = None
 movie_by_index = None
 
-def compute_recall(account, k=20):
-    # accounts ==== all the transactions of one user, must not be empty
-    customer = account[0]['hashed_ID']
+def compute_recall_precision(account, predictions, k=20):
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
-    # select the row for customer
-    # compute the probability of each movie to be predicted
-    #       and get the top k that the user didn't see yet
-
-    predictions = train_transform[accounts[customer]].dot(lda.components_)
     selected_k = np.argpartition(predictions, -k)[-k:]
 
     k_movie_set = set([movie_by_index[i] for i in selected_k])
-    # make k predictions for each account
-    #   |relevant docs intersect retrieved docs| / |relevant docs|
 
-    return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
+    return (len(relevant_docs & k_movie_set) / float(len(relevant_docs)), len(relevant_docs & k_movie_set) / float(k))
 
 def metric_agregator(account):
-    return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
+    predictions = train_transform[accounts[account[0]['hashed_ID']]].dot(lda.components_)
+
+    # further improvement: sort once only
+
+    rp10 = compute_recall_precision(account, predictions, 10)
+    rp20 = compute_recall_precision(account, predictions, 20)
+    rp50 = compute_recall_precision(account, predictions, 50)
+    return (rp10[0], rp20[0], rp50[0], rp10[1], rp20[1], rp50[1])
 
 def metrics_evaluater(filepath, metrics):
     account = []
@@ -93,4 +91,3 @@ if __name__ == '__main__':
 
     results = metrics_evaluater(test_file, metric_agregator)
     print [sum(y) / len(y) for y in zip(*results)]
-

@@ -21,17 +21,17 @@ accounts = None
 clus_by_index = None
 term_movie_matr = None
 
-def compute_recall(account, k=20):
-    # accounts ==== all the transactions of one user, must not be empty
-    customer = account[0]['hashed_ID']
+def compute_recall_precision(account, predictions, movie_by_index, k=20):
     relevant_docs = set(map(lambda x: x['VM_TITLE'], account))
 
-    # print term_movie_matr
+    selected_k = np.argpartition(predictions, -k)[-k:]
 
-    # select the row for customer
-    # compute the probability of each movie to be predicted
-    #       and get the top k that the user didn't see yet
+    k_movie_set = set([movie_by_index[i] for i in selected_k])
 
+    return (len(relevant_docs & k_movie_set) / float(len(relevant_docs)), len(relevant_docs & k_movie_set) / float(k))
+
+def metric_agregator(account):
+    customer = account[0]['hashed_ID']
     cluster_predictions = train_transform[accounts[customer]].dot(lda.components_)
     # this will give me only clusters so need to multiply with movies frequencies for each cluster and then get the top k
 
@@ -44,16 +44,10 @@ def compute_recall(account, k=20):
             movie_by_index.append(movie)
             predictions.append(term_movie_matr[str_cluster][movie] * cluster_predictions[cluster])
 
-    selected_k = np.argpartition(predictions, -k)[-k:]
-
-    k_movie_set = set([movie_by_index[i] for i in selected_k])
-    # make k predictions for each account
-    #   |relevant docs intersect retrieved docs| / |relevant docs|
-
-    return len(relevant_docs & k_movie_set) / float(len(relevant_docs))
-
-def metric_agregator(account):
-    return (compute_recall(account, 10), compute_recall(account, 20), compute_recall(account, 50))
+    rp10 = compute_recall_precision(account, predictions, movie_by_index, 10)
+    rp20 = compute_recall_precision(account, predictions, movie_by_index, 20)
+    rp50 = compute_recall_precision(account, predictions, movie_by_index, 50)
+    return (rp10[0], rp20[0], rp50[0], rp10[1], rp20[1], rp50[1])
 
 def metrics_evaluater(filepath, metrics):
     account = []
