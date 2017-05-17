@@ -5,6 +5,9 @@ from scipy.sparse import csc_matrix
 import random
 import math
 
+from joblib import Parallel, delayed
+import multiprocessing
+
 class KMeans(object):
     def __init__(self, df, n_clusters):
         self.df = df.tocsc()  # np sparce matrix
@@ -14,6 +17,8 @@ class KMeans(object):
 
         self._precomputed_squared_points = np.zeros(self.df.shape[1])
         self._precomputed_squared_centroids = np.zeros(n_clusters)
+
+        self.num_cores = multiprocessing.cpu_count()
 
     def get_centroids(self):
         A = coo_matrix((np.ones(self.labels.size), (np.array(range(0, self.labels.size)), self.labels)), shape=(self.labels.size, self.n_clusters), dtype=np.int8).tocsc()
@@ -40,27 +45,30 @@ class KMeans(object):
             centroid = self.centroids.getcol(i)
             self._precomputed_squared_centroids[i] = math.sqrt(centroid.transpose().dot(centroid)[0,0])
 
-        for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
-            point = self.df.getcol(i)
+        # for i in tqdm(xrange(self.df.shape[1])):  # TODO: parallelize this
+        #     labels[i] = findClosestCentroid(i, self.df.getcol(i), self.centroids, self.distance)
 
-            min_distance = 100
-            closest_centroid = -1
-
-            # going through all centroids
-            for j in xrange(self.centroids.shape[1]):
-                centroid = self.centroids.getcol(j)
-
-                dist = self.distance(point, centroid, i, j)
-                if dist < min_distance:
-                    closest_centroid = j
-                    min_distance = dist
-
-            if closest_centroid == -1:
-                print 'something wrong happened in finding the closest_centroid'
-
-            labels[i] = closest_centroid
+        labels = Parallel(n_jobs=self.num_cores)(delayed(findClosestCentroid)(i, self.df.getcol(i), self.centroids, self.distance) for i in qdm(xrange(self.df.shape[1])))
 
         return labels
+
+    def findClosestCentroid(i, point, centroids, distance):
+        min_distance = 100
+        closest_centroid = -1
+
+        # going through all centroids
+        for j in xrange(centroids.shape[1]):
+            centroid = centroids.getcol(j)
+
+            dist = distance(point, centroid, i, j)
+            if dist < min_distance:
+                closest_centroid = j
+                min_distance = dist
+
+        if closest_centroid == -1:
+            print 'something wrong happened in finding the closest_centroid'
+
+        return closest_centroid
 
     def distance(self, p1, p2, i, j):
         ab = (p1.transpose()).dot(p2)[0,0]
@@ -82,7 +90,7 @@ class KMeans(object):
             if self.labels[i] != labels[i]:
                 count += 1
 
-        print "{} points out of {} changed labels".format(count, len(labels))
+        # print "{} points out of {} changed labels".format(count, len(labels))
         return count > 0 and iterations < 50
 
     # clustering columns, a column is a movie
@@ -101,7 +109,7 @@ class KMeans(object):
         old_centroids = None
         old_labels = np.zeros(self.df.shape[1], dtype=int)
         while self._to_continue(old_labels, iterations):
-            print 'starting iteration: {}'.format(iterations+1)
+            # print 'starting iteration: {}'.format(iterations+1)
             iterations += 1
 
             old_centroids = self.centroids
