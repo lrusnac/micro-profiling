@@ -28,8 +28,8 @@ def get_cluster_matrix(filepath):
         if transact['hashed_ID'] not in accounts:
             accounts[transact['hashed_ID']] = len(accounts)
 
-        if int(transact['KMeans100']) > n_clusters:
-            n_clusters = int(transact['KMeans100'])
+        if int(transact['KMeans']) > n_clusters:
+            n_clusters = int(transact['KMeans'])
 
     n_clusters += 1
     #print 'n_clusters ' + str(n_clusters)
@@ -43,7 +43,7 @@ def get_cluster_matrix(filepath):
     #print 'creating the rows and cols lists'
     for transact in tqdm(csvfile, total=get_line_count(filepath)):
         row.append(accounts[transact['hashed_ID']])
-        col.append(int(transact['KMeans100']))
+        col.append(int(transact['KMeans']))
 
     ##### Sparse matrix
     matr = coo_matrix((np.ones(len(row)), (np.array(row), np.array(col))), shape=(len(accounts), n_clusters))
@@ -129,13 +129,13 @@ def get_term_movie_matrix(filepath, term_key):
             terms_count[term] = 1
         else:
             terms_count[term] += 1
-        
+
         # Initialize/add movie's count in cluster
         if movie not in terms[term]:
             terms[term][movie] = 1
         else:
             terms[term][movie] += 1
-    
+
     # Transform raw movie counts to movie probabilities within cluster
     for term, movies in terms.iteritems():
         for movie, count in movies.iteritems():
@@ -207,7 +207,7 @@ if __name__ == '__main__':
 
     print "Accounts: {}".format(len(accounts))
     print "Micro-profile cands.: {}".format(len(micro_cands))
-    
+
 
     ##### Print each cluster's importance in a topic if "cluster_p >= min_topic_p"
     # components = normalize(lda.components_, axis=1, norm='l1')
@@ -223,5 +223,3 @@ if __name__ == '__main__':
     #         if p >= min_topic_p:
     #             topics.append("{:>2}: {:>6.4f}".format(i, p))
     #     print "{} {}".format(u_hash, topics)
-
-    
