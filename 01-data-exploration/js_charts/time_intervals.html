@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<style>
+.axis {
+    font-size: 14px;
+}
+
+.axis .domain {
+  display: none;
+}
+
+</style>
+<svg width="660" height="500" id="recall"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script>
+var rsvg = d3.select("#recall"),
+    margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = +rsvg.attr("width") - margin.left - margin.right,
+    height = +rsvg.attr("height") - margin.top - margin.bottom,
+    g = rsvg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var x0 = d3.scaleBand()
+    .rangeRound([0, width])
+    .paddingInner(0.1);
+
+var x1 = d3.scaleBand()
+    .padding(0.05);
+
+var y = d3.scaleLinear()
+    .rangeRound([height, 0]);
+
+var z = d3.scaleOrdinal().range(["#a05d56", "#ff8c00"]);
+
+d3.csv("data/time_split.csv", function(d, i, columns) {
+  //for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+  return d;
+}, function(error, data) {
+  if (error) throw error;
+
+  var models = d3.map(data, function(d){return d.Model;}).keys();
+//  x0.domain(models);
+
+  x0.domain(models);
+  x1.domain(['Recall', 'Precision']).rangeRound([0, x0.bandwidth()]);
+
+  y.domain([0, d3.max(data, function(d) { return parseFloat(d.Value) + 0.05; })]).nice();
+  //y.domain([0, 0.45]).nice();
+
+  g.append("g")
+    // .selectAll("g")
+    // .data(data)
+    // .enter().append("g")
+    //
+    .selectAll("rect").data(data)
+    //.data(function(d) { return d.values.map(function(key) { return key; }); })
+    .enter().append("rect")
+      .attr("transform", function(d) { return "translate(" + x0(d.Model) + ",0)"; })
+      .attr("x", function(d) { return x1(d.Type); })
+      .attr("y", function(d) { return y(parseFloat(d.Value)); })
+      .attr("width", x1.bandwidth())
+      .attr("height", function(d) { return height - y(parseFloat(d.Value)); })
+      .attr("fill", function(d) { return z(d.Type); });
+
+      g.append("g")
+        // .selectAll("g")
+        // .data(data)
+        // .enter().append("g")
+        //
+        .selectAll("text").data(data)
+        //.data(function(d) { return d.values.map(function(key) { return key; }); })
+        .enter().append("text")
+            .attr("transform", function(d) { return "translate(" + x0(d.Model) + ",0)"; })
+            // .attr("font-family", "sans-serif")
+            .attr("font-size", 14)
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.32em")
+          .attr("x", function(d) { return x1(d.Type) + x1.bandwidth()/2; })
+          .attr("y", function(d) { return y(parseFloat(d.Value) + 0.005); })
+          .text(function(d) {return '+'+parseFloat(d.Percent*100).toFixed(1) + '%';});
+
+  g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height + ")")
+      .attr("font-size", 14)
+      .call(d3.axisBottom(x0));
+
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y))//.ticks(null, "s"))
+    // .append("text")
+    //   //.attr("x", 2)
+    //   .attr("y", 10)
+    //   .attr("dy", "0.32em")
+    //   .attr("fill", "#000")
+    //   .attr("font-weight", "bold")
+    //   .attr("font-size", 18)
+    //   //.attr("text-anchor", "start")
+    //   .attr("transform", "rotate(-90)")
+    //   .text("Recall");
+
+      var legend = g.append("g")
+        .selectAll("g")
+        .data(['Recall', 'Precision'])
+        .enter().append("g")
+          .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
+
+      var legendPos = 550;
+
+      legend.append("rect")
+          .attr("x", legendPos)
+          .attr("width", 29)
+          .attr("height", 29)
+          .attr("fill", z);
+
+      legend.append("text")
+          .attr("x", legendPos-7)
+          .attr("y", 14.5)
+          .attr("dy", "0.32em")
+
+              .attr("font-family", "sans-serif")
+              .attr("font-size", 18)
+              .attr("text-anchor", "end")
+          .text(function(d) { return d; });
+});
+
+</script>
