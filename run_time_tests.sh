@@ -18,8 +18,11 @@ do
     do
         echo '== '$j' intervals, starting at '$i' =='
         python split_customer.py $dataset -n$j -s$i
-        export out_file="to_be_defined.csv" ;
-        head -n1 $splitedbytime > $out_file ; tail -n+2 $splitedbytime | sort >> $out_file
+        out_file="to_be_defined.csv"
+
+        head -n1 $splitedbytime > $out_file
+        tail -n+2 $splitedbytime | sort >> $out_file
+
         rm $splitedbytime
         python split_data.py $out_file
         python ../06-latent-dirichlet-allocation/lda_recall.py $train $test
