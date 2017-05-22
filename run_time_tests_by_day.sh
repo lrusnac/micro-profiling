@@ -9,7 +9,7 @@ fulldatasetnofilename="${dataset%.*}"
 splitedbytime=$fulldatasetnofilename'_divided_by_time.csv'
 cd 00-common
 
-python split_customer.py $dataset -d="day"
+python split_customer.py $dataset -d="day" -n0
 out_file="to_be_defined.csv"
 
 head -n1 $splitedbytime > $out_file
