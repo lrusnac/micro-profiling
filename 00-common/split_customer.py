@@ -25,9 +25,13 @@ def hourToGroup(hour):
 
     return '0'
 
-def dayToWeek(day):
+def dayToGroup(day, days):
     day = int(day)
-
+    days = int(days)
+    if days == 7:
+        return str(day)
+    if days == 0:
+        return '0'
     if day < 5:
         return '0'
     else:
@@ -38,7 +42,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file')
     parser.add_argument('-n', '--intervals', type=int, default=2, help='number of time intervals')
-    parser.add_argument('-s', '--starting', type=int, default=0, help='stariting point')
+    parser.add_argument('-s', '--starting', type=int, default=0, help='starting point')
 
     parser.add_argument('-d', '--divideby', choices=['time', 'day'], default='time')
 
@@ -59,5 +63,5 @@ if __name__ == '__main__':
             if args.divideby == 'time':
                 entry['hashed_ID'] = entry['hashed_ID'] + '-' + hourToGroup(entry['HOUR_OF_DAY'])
             else:
-                entry['hashed_ID'] = entry['hashed_ID'] + '-' + dayToGroup(entry['DAY_OF_WEEK'])
+                entry['hashed_ID'] = entry['hashed_ID'] + '-' + dayToGroup(entry['DAY_OF_WEEK'], args.intervals)
             writer.writerow(map(lambda field: entry[field], csvfile.fieldnames))
