@@ -47,9 +47,28 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var line = d3.svg.line().interpolate("cardinal")//.curve(d3.curveBasis)
+    .x(function(d) { return x(d.Views_clean); })
+    .y(function(d) {
+        var t = 2974770/Math.pow(d.Views_clean, 2.18827);
+        // if (t < 0) {
+        //     console.log("aaa: " + t + " - " + d + " - " + y(t));
+        // }
+        //
+        // if (y(t) < 0) {
+        //     console.log("bbb: " + t + " - " + d + " - " + y(t));
+        //     console.log(d);
+        // }
+        return y(t);
+    });
+
 d3.csv("data/views_stats.csv", function(error, data) {
   if (error) throw error;
 
+  clean = []
+  data.forEach(function(d) {
+    if (d.Views_clean != '') clean.push(d);
+  })
   // data.forEach(function(d) {
   //   d.sepalLength = +d.sepalLength;
   //   d.sepalWidth = +d.sepalWidth;
@@ -82,7 +101,8 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .style("text-anchor", "end")
       .text("Accounts");
 
-  svg.selectAll(".dot2")
+    var originalPoints = svg.append("g");
+      originalPoints.selectAll(".dot2")
       .data(data)
     .enter().append("circle")
       .attr("class", "dot2")
@@ -91,8 +111,9 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("cy", function(d) { return y(d.Users_original); })
       .style("fill", function(d) { return color("Original accounts"); });
 
-  svg.selectAll(".dot")
-      .data(data)
+  var cleanPoints = svg.append("g");
+  cleanPoints.selectAll(".dot")
+      .data(clean)
     .enter().append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
@@ -100,6 +121,16 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("cy", function(d) { return y(d.Users_clean); })
       .style("fill", function(d) { return color("Clean accounts"); })
       .attr("display", function(d) { return d.Views_clean == '' ? "none": ""; });
+
+    //   var lines = svg.selectAll(".lines")
+    //       .data(data)
+    //       .enter().append("g")
+    //         .attr("class", "lines");
+
+        svg.append("path")
+            .attr("class", "line")
+            .attr("d", line(clean))
+            .style("stroke", "red");
 
   svg.append("rect")
     .attr("x", x(24))

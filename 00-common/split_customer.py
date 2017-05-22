@@ -6,6 +6,7 @@ import sys
 
 from common import get_data_file_pointer
 from common import get_line_count
+import argparse
 # OUTFILEPATH = '10_percent_v01'
 
 csv.field_size_limit(1000000000)
@@ -26,7 +27,17 @@ def hourToGroup(hour):
 
 
 if __name__ == '__main__':
-    filepath = sys.argv[1]
+    #  $dataset -t -n$j -s$i
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file')
+    parser.add_argument('-n', '--intervals', type=int, default=2, help='number of time intervals')
+    parser.add_argument('-s', '--starting', type=int, default=0, help='stariting point')
+
+    args = parser.parse_args()
+
+    time_interval_splits = sorted([(x*(24/args.intervals)+args.starting)%24 for x in range(args.intervals)])
+
+    filepath = args.file
     out_filepath = '.'.join(filepath.split('/')[-1].split('.')[:-1]) + '_divided_by_time.csv'
 
     csvfile = get_data_file_pointer(filepath)
@@ -39,5 +50,3 @@ if __name__ == '__main__':
             entry['hashed_ID'] = entry['hashed_ID'] + '-' + hourToGroup(entry['HOUR_OF_DAY'])
 
             writer.writerow(map(lambda field: entry[field], csvfile.fieldnames))
-
-
