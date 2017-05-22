@@ -25,6 +25,10 @@ do
 
         rm $splitedbytime
         python split_data.py $out_file
+
+        train="to_be_defined_train.csv"
+        test="to_be_defined_test.csv"
+
         python ../06-latent-dirichlet-allocation/lda_recall.py $train $test
         rm $train
         rm $test
