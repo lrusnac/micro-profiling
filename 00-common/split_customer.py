@@ -25,6 +25,13 @@ def hourToGroup(hour):
 
     return '0'
 
+def dayToWeek(day):
+    day = int(day)
+
+    if day < 5:
+        return '0'
+    else:
+        return '1'
 
 if __name__ == '__main__':
     #  $dataset -t -n$j -s$i
@@ -32,6 +39,8 @@ if __name__ == '__main__':
     parser.add_argument('file')
     parser.add_argument('-n', '--intervals', type=int, default=2, help='number of time intervals')
     parser.add_argument('-s', '--starting', type=int, default=0, help='stariting point')
+
+    parser.add_argument('-d', '--divideby', choices=['time', 'day'], default='time')
 
     args = parser.parse_args()
 
@@ -47,6 +56,8 @@ if __name__ == '__main__':
         writer.writerow(csvfile.fieldnames)
 
         for entry in tqdm(csvfile, total=get_line_count(sys.argv[1])):
-            entry['hashed_ID'] = entry['hashed_ID'] + '-' + hourToGroup(entry['HOUR_OF_DAY'])
-
+            if args.divideby == 'time':
+                entry['hashed_ID'] = entry['hashed_ID'] + '-' + hourToGroup(entry['HOUR_OF_DAY'])
+            else:
+                entry['hashed_ID'] = entry['hashed_ID'] + '-' + dayToGroup(entry['DAY_OF_WEEK'])
             writer.writerow(map(lambda field: entry[field], csvfile.fieldnames))
