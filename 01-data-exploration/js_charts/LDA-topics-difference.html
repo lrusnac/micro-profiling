@@ -13,6 +13,9 @@ body {
   shape-rendering: crispEdges;
 }
 
+.axis {
+    font-size: 14px;
+}
 .line {
     stroke: steelblue;
     stroke-width: 1;
@@ -89,6 +92,8 @@ d3.csv("data/lda-topics.csv", function(error, data) {
         .attr("x", width)
         .attr("y", -6)
         .style("text-anchor", "end")
+        .attr("font-size", "18")
+        .attr("font-weight", "bold")
         .text("LDA Topics");
 
     svg.append("g")
@@ -97,9 +102,11 @@ d3.csv("data/lda-topics.csv", function(error, data) {
       .append("text")
         .attr("class", "label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", 10)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
+        .attr("font-size", "18")
+        .attr("font-weight", "bold")
         .text("Recall@k");
 
     svg.selectAll(".dot")
@@ -128,21 +135,22 @@ d3.csv("data/lda-topics.csv", function(error, data) {
         .data(color.domain())
       .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        .attr("transform", function(d, i) { return "translate(0," + (i * 30+30) + ")"; });
 
-    var legendPos = 90;//= width - 18;
+    var legendPos = width - 38;
 
     legend.append("rect")
         .attr("x", legendPos)
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("width", 29)
+        .attr("height", 29)
         .style("fill", color);
 
     legend.append("text")
-        .attr("x", legendPos-6)
-        .attr("y", 9)
+        .attr("x", legendPos-7)
+        .attr("y", 15.5)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
+        .attr("font-size", "14")
         .text(function(d) { return d; });
 });
 </script>
