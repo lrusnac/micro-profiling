@@ -10,7 +10,7 @@
 }
 
 </style>
-<svg width="960" height="500"></svg>
+<svg width="500" height="400"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -110,7 +110,7 @@ d3.csv("data/precision.csv", function(d, i, columns) {
     .enter().append("g")
       .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
 
-  var legendPos = width-100;
+  var legendPos = width-33;
 
   legend.append("rect")
       .attr("x", legendPos)

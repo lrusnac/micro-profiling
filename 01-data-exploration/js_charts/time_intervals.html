@@ -9,7 +9,7 @@
 }
 
 </style>
-<svg width="660" height="500" id="recall"></svg>
+<svg width="960" height="500" id="recall"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
 <script>
@@ -104,7 +104,7 @@ d3.csv("data/time_split.csv", function(d, i, columns) {
         .enter().append("g")
           .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
 
-      var legendPos = 550;
+      var legendPos = width-100;
 
       legend.append("rect")
           .attr("x", legendPos)

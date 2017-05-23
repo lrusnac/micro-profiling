@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <style>
+.axis {
+    font-size: 14px;
+}
 
 .axis .domain {
   display: none;
 }
 
-.axis {
-    font-size: 14px;
-}
-
 </style>
-<svg width="960" height="500"></svg>
+<svg width="500" height="400"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -52,8 +51,8 @@ d3.csv("data/recall_divided_by_time.csv", function(d, i, columns) {
 
   x0.domain(data.map(function(d) { return "Recall@"+d.K; }));
   x1.domain(models).rangeRound([0, x0.bandwidth()]);
-  // y.domain([0, d3.max(data, function(d) { return parseFloat(d.Value); })]).nice();
-  y.domain([0, 0.45]).nice();
+  //y.domain([0, d3.max(data, function(d) { return parseFloat(d.Value); })]).nice();
+  y.domain([0, 0.5]).nice();
 
   g.append("g")
     .selectAll("g")
@@ -88,6 +87,7 @@ d3.csv("data/recall_divided_by_time.csv", function(d, i, columns) {
   g.append("g")
       .attr("class", "axis")
       .attr("transform", "translate(0," + height + ")")
+      .attr("font-size", 14)
       .call(d3.axisBottom(x0));
 
   g.append("g")
