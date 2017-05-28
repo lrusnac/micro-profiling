@@ -13,6 +13,9 @@ import numpy
 LDA_MAX_ITER = 20
 N_TOPICS = 40
 
+DOC_TOPIC_THRESH = 0.1
+TOPIC_TERM_THRESH = 0.001
+
 lda = None
 doc_topic_matr = None
 top_term_matr = None
@@ -36,6 +39,10 @@ def build_lda_model(train_file):
 
 if __name__ == '__main__':
     data_file = sys.argv[1]
+    # if len(sys.argv) == 4:
+    #     DOC_TOPIC_THRESH = float(sys.argv[2])
+    #     TOPIC_TERM_THRESH = float(sys.argv[3])
+
     build_lda_model(data_file)
 
     # Transform account-cluster matrix according to fitted LDA
@@ -60,48 +67,80 @@ if __name__ == '__main__':
     #     p_vals = [str(p) for p in movie_dict.itervalues()]
     #     print '{};{}'.format(topic, ';'.join(p_vals))
 
-    # Filter small values
-    for account, topics in doc_topic_matr.iteritems():
-        filtered = 0
-        unfiltered_sum = 0
-        for i, p in enumerate(topics):
-            if p < 0.01:
-                topics[i] = 0
-                filtered += 1
-            else:
-                unfiltered_sum += p
-        for i, p in enumerate(topics):
-            if p == 0:
-                topics[i] = (1 - unfiltered_sum) / filtered
-        
+    for i in xrange(11, 21):
+        DOC_TOPIC_THRESH = 0.01 * i # 1% - 20%
+        for j in xrange(1, 7):
+            TOPIC_TERM_THRESH = 0.0005 * j # 0.05% - 1%
 
-    for topic, movie_dict in top_term_matr.iteritems():
-        filtered = 0
-        unfiltered_sum = 0
-        for movie in movie_dict:
-            if movie_dict[movie] < 0.1:
-                movie_dict[movie] = 0
-                filtered += 1
-            else:
-                unfiltered_sum += movie_dict[movie]
-        for movie in movie_dict:
-            if movie_dict[movie] == 0:
-                movie_dict[movie] = (1 - unfiltered_sum) / filtered
+            sys.stdout.write(
+                '[INFO] doc_top_t={}   top_term_t={}\n'.format(
+                DOC_TOPIC_THRESH, TOPIC_TERM_THRESH))
+            sys.stdout.flush()
 
-    # calculate entropy
-    dataset = get_data_file_pointer(data_file)
-    guess_accuracy_sum = 0
-    entries = 0
-    for entry in tqdm(dataset, total=get_line_count(data_file)):
-        user = entry['hashed_ID']
-        movie = entry['VM_TITLE']
-        entries += 1
+            # Filter small values
+            def_doc_top_vals = {} # Default p-vals per account for filtered values
+            c_unf_doc_top = 0
+            c_unf_top_term = 0
+            for account, topics in doc_topic_matr.iteritems():
+                unfiltered = unfiltered_sum = 0
+                for i, p in enumerate(topics):
+                    if p == 0:
+                        print "{}: {}".format(account, ";".join(str(t) for t in topics))
+                    if p >= DOC_TOPIC_THRESH:
+                        unfiltered_sum += p
+                        unfiltered += 1
+                c_unf_doc_top += unfiltered
+                def_doc_top_vals[account] =\
+                    (1.0 - unfiltered_sum) / (N_TOPICS - unfiltered)
+                
+            def_top_term_vals = {}
+            c_movies = len(top_term_matr.itervalues().next())
+            for topic, movie_dict in top_term_matr.iteritems():
+                unfiltered = unfiltered_sum = 0
+                for movie in movie_dict:
+                    if p == 0:
+                        print "{}: {}".format(topic, ";".join(str(p) for p in movie_dict.itervalues()))
+                    if movie_dict[movie] >= TOPIC_TERM_THRESH:
+                        unfiltered_sum += movie_dict[movie]
+                        unfiltered += 1
+                c_unf_top_term += unfiltered
+                def_top_term_vals[topic] =\
+                    (1.0 - unfiltered_sum) / (c_movies - unfiltered)
 
-        if user in doc_topic_matr and\
-            movie in top_term_matr[0]: # Redundant check
-            p = sum(t_p * top_term_matr[i][movie]
-                for i, t_p in enumerate(doc_topic_matr[user]))
-            guess_accuracy_sum -= math.log(p, 2)
 
-    print 'Entropy: {}'.format(guess_accuracy_sum / entries)
-    
+            # calculate entropy
+            dataset = get_data_file_pointer(data_file)
+            guess_accuracy_sum = 0
+            entries = 0
+            for entry in tqdm(dataset, total=get_line_count(data_file)):
+                user = entry['hashed_ID']
+                movie = entry['VM_TITLE']
+                entries += 1
+
+                p = 0
+                for topic, t_p in enumerate(doc_topic_matr[user]):
+                    t_p = t_p if t_p >= DOC_TOPIC_THRESH else def_doc_top_vals[user]
+                    m_p = top_term_matr[topic][movie]
+                    m_p = m_p if m_p >= TOPIC_TERM_THRESH else def_top_term_vals[topic]
+                    p += t_p * m_p
+
+                try:
+                    guess_accuracy_sum -= math.log(p, 2)
+                except ValueError:
+                    print p
+                    print user
+                    print movie
+                    print "Doc-Topic:"
+                    print " ; ".join(str(t_p) for t_p in doc_topic_matr[user])
+                    print "Topic-Term:"
+                    print " ; ".join(str(top_term_matr[topic][movie]) for topic, p in enumerate(doc_topic_matr[user]))
+                    raise
+
+            sys.stdout.write('{};{};{}\n'.format(
+                guess_accuracy_sum / entries,
+                c_unf_doc_top,
+                c_unf_top_term))
+            sys.stdout.flush()
+    # print 'Entropy: {}'.format(guess_accuracy_sum / entries)
+    # print 'Unfiltered in doc-topic: {}'.format(c_unf_doc_top)
+    # print 'Unfiltered in topic-term: {}'.format(c_unf_top_term)
