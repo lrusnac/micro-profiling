@@ -15,6 +15,7 @@ N_TOPICS = 40
 
 DOC_TOPIC_THRESH = 0.1
 TOPIC_TERM_THRESH = 0.001
+c = 6
 
 lda = None
 doc_topic_matr = None
@@ -23,6 +24,7 @@ train_matr = None
 train_transform = None
 accounts = None
 movie_by_index = None
+
 
 def build_lda_model(train_file):
     global accounts
@@ -55,13 +57,45 @@ if __name__ == '__main__':
     # Get account-topic matrix from transformed matrix
     doc_topic_matr = get_account_topic_matrix(train_transform, acc_by_index)
 
+    doc_top2 = {}
+    for acc, topics in doc_topic_matr.iteritems():
+        doc_top2[acc] = []
+        for i, t_p in enumerate(topics):
+            t_p = round(c * math.log(1/t_p, 2), 0)
+            t_p = math.pow(math.pow(2, t_p/c), -1)
+            doc_top2[acc].append(t_p)
+        
+        # Ensure sum=1
+        dc_sum = sum(doc_top2[acc])
+        for i in xrange(0, len(doc_top2[acc])):
+            p = doc_top2[acc][i]
+            doc_top2[acc][i] = p + (1-dc_sum) * (p / float(dc_sum))
+            
+    doc_topic_matr = doc_top2
+    
     # for account, topics in doc_topic_matr.iteritems():
     #     print '{};{}'.format(account, ';'.join(str(t) for t in topics))
     # print
 
     # Get topic-cluster matrix from LDA components
     top_term_matr = get_topic_term_matrix(lda.components_, movie_by_index)
-
+    
+    top_term2 = {}
+    for top, movies_dict in top_term_matr.iteritems():
+        top_term2[top] = {}
+        for movie, m_p in movies_dict.iteritems():
+            m_p = round(c * math.log(1/m_p, 2), 0)
+            m_p = math.pow(math.pow(2, m_p/c), -1)
+            top_term2[top][movie] = m_p
+        
+        # Ensure sum=1
+        tt_sum = sum(top_term2[top].values())
+        for movie in top_term2[top].keys():
+            p = top_term2[top][movie]
+            top_term2[top][movie] = p + (1-tt_sum) * (p / float(tt_sum))
+            
+    top_term_matr = top_term2
+    
     # print 'TOPIC;{}'.format(';'.join(top_term_matr[0].iterkeys()))
     # for topic, movie_dict in top_term_matr.iteritems():
     #     p_vals = [str(p) for p in movie_dict.itervalues()]
