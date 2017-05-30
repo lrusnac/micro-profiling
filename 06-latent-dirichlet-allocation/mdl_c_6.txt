@@ -1,0 +1,240 @@
+[INFO] doc_top_t=0.11   top_term_t=0.0005
+8.94892030547;188111;10466
+[INFO] doc_top_t=0.11   top_term_t=0.001
+9.07777165368;188111;6887
+[INFO] doc_top_t=0.11   top_term_t=0.0015
+9.19251736331;188111;5352
+[INFO] doc_top_t=0.11   top_term_t=0.002
+9.33919552091;188111;4068
+[INFO] doc_top_t=0.11   top_term_t=0.0025
+9.45334442713;188111;3332
+[INFO] doc_top_t=0.11   top_term_t=0.003
+9.52407575857;188111;3018
+[INFO] doc_top_t=0.12   top_term_t=0.0005
+8.98152989384;177919;10466
+[INFO] doc_top_t=0.12   top_term_t=0.001
+9.10943688479;177919;6887
+[INFO] doc_top_t=0.12   top_term_t=0.0015
+9.22357036025;177919;5352
+[INFO] doc_top_t=0.12   top_term_t=0.002
+9.36925340766;177919;4068
+[INFO] doc_top_t=0.12   top_term_t=0.0025
+9.48262973875;177919;3332
+[INFO] doc_top_t=0.12   top_term_t=0.003
+9.55282839638;177919;3018
+[INFO] doc_top_t=0.13   top_term_t=0.0005
+9.02958406471;164335;10466
+[INFO] doc_top_t=0.13   top_term_t=0.001
+9.15591177482;164335;6887
+[INFO] doc_top_t=0.13   top_term_t=0.0015
+9.26903445883;164335;5352
+[INFO] doc_top_t=0.13   top_term_t=0.002
+9.41339947869;164335;4068
+[INFO] doc_top_t=0.13   top_term_t=0.0025
+9.52560535532;164335;3332
+[INFO] doc_top_t=0.13   top_term_t=0.003
+9.59509935221;164335;3018
+[INFO] doc_top_t=0.14   top_term_t=0.0005
+9.05557466014;157814;10466
+[INFO] doc_top_t=0.14   top_term_t=0.001
+9.18107501638;157814;6887
+[INFO] doc_top_t=0.14   top_term_t=0.0015
+9.29366331306;157814;5352
+[INFO] doc_top_t=0.14   top_term_t=0.002
+9.43729814231;157814;4068
+[INFO] doc_top_t=0.14   top_term_t=0.0025
+9.54880834185;157814;3332
+[INFO] doc_top_t=0.14   top_term_t=0.003
+9.61785871341;157814;3018
+[INFO] doc_top_t=0.15   top_term_t=0.0005
+9.0868871522;150207;10466
+[INFO] doc_top_t=0.15   top_term_t=0.001
+9.21148115447;150207;6887
+[INFO] doc_top_t=0.15   top_term_t=0.0015
+9.32339413682;150207;5352
+[INFO] doc_top_t=0.15   top_term_t=0.002
+9.46609132851;150207;4068
+[INFO] doc_top_t=0.15   top_term_t=0.0025
+9.57674326462;150207;3332
+[INFO] doc_top_t=0.15   top_term_t=0.003
+9.64530362279;150207;3018
+[INFO] doc_top_t=0.16   top_term_t=0.0005
+9.13730573262;138898;10466
+[INFO] doc_top_t=0.16   top_term_t=0.001
+9.26052828233;138898;6887
+[INFO] doc_top_t=0.16   top_term_t=0.0015
+9.3711298772;138898;5352
+[INFO] doc_top_t=0.16   top_term_t=0.002
+9.51232451399;138898;4068
+[INFO] doc_top_t=0.16   top_term_t=0.0025
+9.6216705025;138898;3332
+[INFO] doc_top_t=0.16   top_term_t=0.003
+9.6894945668;138898;3018
+[INFO] doc_top_t=0.17   top_term_t=0.0005
+9.15030262522;136279;10466
+[INFO] doc_top_t=0.17   top_term_t=0.001
+9.27316733655;136279;6887
+[INFO] doc_top_t=0.17   top_term_t=0.0015
+9.38350791556;136279;5352
+[INFO] doc_top_t=0.17   top_term_t=0.002
+9.52437414259;136279;4068
+[INFO] doc_top_t=0.17   top_term_t=0.0025
+9.63344312146;136279;3332
+[INFO] doc_top_t=0.17   top_term_t=0.003
+9.70103412685;136279;3018
+[INFO] doc_top_t=0.18   top_term_t=0.0005
+9.2120718061;124425;10466
+[INFO] doc_top_t=0.18   top_term_t=0.001
+9.33313304257;124425;6887
+[INFO] doc_top_t=0.18   top_term_t=0.0015
+9.44180884669;124425;5352
+[INFO] doc_top_t=0.18   top_term_t=0.002
+9.5806722808;124425;4068
+[INFO] doc_top_t=0.18   top_term_t=0.0025
+9.6880364014;124425;3332
+[INFO] doc_top_t=0.18   top_term_t=0.003
+9.75459976884;124425;3018
+[INFO] doc_top_t=0.19   top_term_t=0.0005
+9.22324769564;122350;10466
+[INFO] doc_top_t=0.19   top_term_t=0.001
+9.34400111066;122350;6887
+[INFO] doc_top_t=0.19   top_term_t=0.0015
+9.4523887521;122350;5352
+[INFO] doc_top_t=0.19   top_term_t=0.002
+9.59084470337;122350;4068
+[INFO] doc_top_t=0.19   top_term_t=0.0025
+9.69790586887;122350;3332
+[INFO] doc_top_t=0.19   top_term_t=0.003
+9.76429657974;122350;3018
+[INFO] doc_top_t=0.2   top_term_t=0.0005
+9.27900458718;113012;10466
+[INFO] doc_top_t=0.2   top_term_t=0.001
+9.39808032245;113012;6887
+[INFO] doc_top_t=0.2   top_term_t=0.0015
+9.50488111589;113012;5352
+[INFO] doc_top_t=0.2   top_term_t=0.002
+9.6412237407;113012;4068
+[INFO] doc_top_t=0.2   top_term_t=0.0025
+9.74677164595;113012;3332
+[INFO] doc_top_t=0.2   top_term_t=0.003
+9.81223526727;113012;3018
+[INFO] doc_top_t=0.21   top_term_t=0.0005
+9.30619855889;108606;10466
+[INFO] doc_top_t=0.21   top_term_t=0.001
+9.42448036891;108606;6887
+[INFO] doc_top_t=0.21   top_term_t=0.0015
+9.53053706749;108606;5352
+[INFO] doc_top_t=0.21   top_term_t=0.002
+9.66586620501;108606;4068
+[INFO] doc_top_t=0.21   top_term_t=0.0025
+9.77079011764;108606;3332
+[INFO] doc_top_t=0.21   top_term_t=0.003
+9.8357675491;108606;3018
+[INFO] doc_top_t=0.22   top_term_t=0.0005
+9.32931048157;105206;10466
+[INFO] doc_top_t=0.22   top_term_t=0.001
+9.44687708488;105206;6887
+[INFO] doc_top_t=0.22   top_term_t=0.0015
+9.55239515983;105206;5352
+[INFO] doc_top_t=0.22   top_term_t=0.002
+9.68692936678;105206;4068
+[INFO] doc_top_t=0.22   top_term_t=0.0025
+9.79122348549;105206;3332
+[INFO] doc_top_t=0.22   top_term_t=0.003
+9.85583000455;105206;3018
+[INFO] doc_top_t=0.23   top_term_t=0.0005
+9.39588381819;95596;10466
+[INFO] doc_top_t=0.23   top_term_t=0.001
+9.51099080504;95596;6887
+[INFO] doc_top_t=0.23   top_term_t=0.0015
+9.61466819566;95596;5352
+[INFO] doc_top_t=0.23   top_term_t=0.002
+9.74669082881;95596;4068
+[INFO] doc_top_t=0.23   top_term_t=0.0025
+9.84902200022;95596;3332
+[INFO] doc_top_t=0.23   top_term_t=0.003
+9.91259297122;95596;3018
+[INFO] doc_top_t=0.24   top_term_t=0.0005
+9.39955586208;95135;10466
+[INFO] doc_top_t=0.24   top_term_t=0.001
+9.51452858972;95135;6887
+[INFO] doc_top_t=0.24   top_term_t=0.0015
+9.6181164431;95135;5352
+[INFO] doc_top_t=0.24   top_term_t=0.002
+9.75003863608;95135;4068
+[INFO] doc_top_t=0.24   top_term_t=0.0025
+9.85229658737;95135;3332
+[INFO] doc_top_t=0.24   top_term_t=0.003
+9.91582670227;95135;3018
+[INFO] doc_top_t=0.25   top_term_t=0.0005
+9.44992388981;88732;10466
+[INFO] doc_top_t=0.25   top_term_t=0.001
+9.5631631848;88732;6887
+[INFO] doc_top_t=0.25   top_term_t=0.0015
+9.66528798523;88732;5352
+[INFO] doc_top_t=0.25   top_term_t=0.002
+9.79518274852;88732;4068
+[INFO] doc_top_t=0.25   top_term_t=0.0025
+9.89597684342;88732;3332
+[INFO] doc_top_t=0.25   top_term_t=0.003
+9.95861376014;88732;3018
+[INFO] doc_top_t=0.26   top_term_t=0.0005
+9.50134296506;82438;10466
+[INFO] doc_top_t=0.26   top_term_t=0.001
+9.61279525687;82438;6887
+[INFO] doc_top_t=0.26   top_term_t=0.0015
+9.71343859891;82438;5352
+[INFO] doc_top_t=0.26   top_term_t=0.002
+9.84137409465;82438;4068
+[INFO] doc_top_t=0.26   top_term_t=0.0025
+9.94066267223;82438;3332
+[INFO] doc_top_t=0.26   top_term_t=0.003
+10.0022926082;82438;3018
+[INFO] doc_top_t=0.27   top_term_t=0.0005
+9.50353539077;82198;10466
+[INFO] doc_top_t=0.27   top_term_t=0.001
+9.61491486424;82198;6887
+[INFO] doc_top_t=0.27   top_term_t=0.0015
+9.71551140209;82198;5352
+[INFO] doc_top_t=0.27   top_term_t=0.002
+9.84335902641;82198;4068
+[INFO] doc_top_t=0.27   top_term_t=0.0025
+9.94262523996;82198;3332
+[INFO] doc_top_t=0.27   top_term_t=0.003
+10.0042449917;82198;3018
+[INFO] doc_top_t=0.28   top_term_t=0.0005
+9.55341564202;76674;10466
+[INFO] doc_top_t=0.28   top_term_t=0.001
+9.66281680802;76674;6887
+[INFO] doc_top_t=0.28   top_term_t=0.0015
+9.76171113225;76674;5352
+[INFO] doc_top_t=0.28   top_term_t=0.002
+9.88745839408;76674;4068
+[INFO] doc_top_t=0.28   top_term_t=0.0025
+9.98515240987;76674;3332
+[INFO] doc_top_t=0.28   top_term_t=0.003
+10.0458521812;76674;3018
+[INFO] doc_top_t=0.29   top_term_t=0.0005
+9.61241818726;70416;10466
+[INFO] doc_top_t=0.29   top_term_t=0.001
+9.71962133498;70416;6887
+[INFO] doc_top_t=0.29   top_term_t=0.0015
+9.81653995388;70416;5352
+[INFO] doc_top_t=0.29   top_term_t=0.002
+9.93982558292;70416;4068
+[INFO] doc_top_t=0.29   top_term_t=0.0025
+10.0356778985;70416;3332
+[INFO] doc_top_t=0.29   top_term_t=0.003
+10.0951985328;70416;3018
+[INFO] doc_top_t=0.3   top_term_t=0.0005
+9.61550647391;70119;10466
+[INFO] doc_top_t=0.3   top_term_t=0.001
+9.72265085474;70119;6887
+[INFO] doc_top_t=0.3   top_term_t=0.0015
+9.81951342501;70119;5352
+[INFO] doc_top_t=0.3   top_term_t=0.002
+9.94269418513;70119;4068
+[INFO] doc_top_t=0.3   top_term_t=0.0025
+10.0384683922;70119;3332
+[INFO] doc_top_t=0.3   top_term_t=0.003
+10.0979138373;70119;3018

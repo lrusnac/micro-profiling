@@ -21,7 +21,7 @@ do
         out_file="to_be_defined.csv"
 
         head -n1 $splitedbytime > $out_file
-        tail -n+2 $splitedbytime | sort >> $out_file
+        tail -n+2 $splitedbytime | sort -t';' -k2 >> $out_file
 
         rm $splitedbytime
         python split_data.py $out_file

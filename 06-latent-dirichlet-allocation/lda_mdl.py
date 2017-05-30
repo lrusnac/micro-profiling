@@ -101,7 +101,7 @@ if __name__ == '__main__':
     #     p_vals = [str(p) for p in movie_dict.itervalues()]
     #     print '{};{}'.format(topic, ';'.join(p_vals))
 
-    for i in xrange(11, 21):
+    for i in xrange(11, 31):
         DOC_TOPIC_THRESH = 0.01 * i # 1% - 20%
         for j in xrange(1, 7):
             TOPIC_TERM_THRESH = 0.0005 * j # 0.05% - 1%
