@@ -76,7 +76,12 @@ d3.csv("data/time_split.csv", function(d, i, columns) {
             .attr("dy", "0.32em")
           .attr("x", function(d) { return x1(d.Type) + x1.bandwidth()/2; })
           .attr("y", function(d) { return y(parseFloat(d.Value) + 0.005); })
-          .text(function(d) {return '+'+parseFloat(d.Percent*100).toFixed(1) + '%';});
+          .text(function(d) {
+              if (parseFloat(d.Percent) > 0 )
+                return '+' + parseFloat(d.Percent*100).toFixed(1) + '%';
+            else
+                return parseFloat(d.Percent*100).toFixed(1) + '%';
+          });
 
   g.append("g")
       .attr("class", "axis")

@@ -13,13 +13,16 @@ body {
   shape-rendering: crispEdges;
 }
 
+.axis {
+    font-size: 14px;
+}
 
 </style>
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var margin = {top: 20, right: 30, bottom: 30, left: 60},
+var margin = {top: 20, right: 30, bottom: 30, left: 80},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -47,18 +50,18 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var line = d3.svg.line().interpolate("cardinal")//.curve(d3.curveBasis)
-    .x(function(d) { return x(d.Views_clean); })
+var line = d3.svg.line()//.curve(d3.curveBasis)
+    .x(function(d) { return x(d); })
     .y(function(d) {
-        var t = 2974770/Math.pow(d.Views_clean, 2.18827);
-        // if (t < 0) {
-        //     console.log("aaa: " + t + " - " + d + " - " + y(t));
-        // }
-        //
-        // if (y(t) < 0) {
-        //     console.log("bbb: " + t + " - " + d + " - " + y(t));
-        //     console.log(d);
-        // }
+        var t = 2974770/Math.pow(d, 2.18827);
+        if (t < 0) {
+            console.log("aaa: " + t + " - " + d + " - " + y(t));
+        }
+
+        if (y(t) < 0) {
+            console.log("bbb: " + t + " - " + d + " - " + y(t));
+            console.log(d);
+        }
         return y(t);
     });
 
@@ -85,7 +88,8 @@ d3.csv("data/views_stats.csv", function(error, data) {
       .attr("class", "label")
       .attr("x", width)
       .attr("y", -6)
-      .attr("font-size", 14)
+      .attr("font-size", 18)
+      .attr("font-weight", "bold")
       .style("text-anchor", "end")
       .text("Views");
 
@@ -95,13 +99,14 @@ d3.csv("data/views_stats.csv", function(error, data) {
     .append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
+      .attr("y", 10)
       .attr("dy", ".71em")
-      .attr("font-size", 14)
+      .attr("font-size", 18)
+      .attr("font-weight", "bold")
       .style("text-anchor", "end")
       .text("Accounts");
 
-    var originalPoints = svg.append("g");
+  var originalPoints = svg.append("g");
       originalPoints.selectAll(".dot2")
       .data(data)
     .enter().append("circle")
@@ -126,11 +131,13 @@ d3.csv("data/views_stats.csv", function(error, data) {
     //       .data(data)
     //       .enter().append("g")
     //         .attr("class", "lines");
+  var linevar = [];
+  for (i=1; i<900; i++) linevar.push(i);
 
-        svg.append("path")
-            .attr("class", "line")
-            .attr("d", line(clean))
-            .style("stroke", "red");
+  svg.append("path")
+    .attr("class", "line")
+    .attr("d", line(linevar))
+    .style("stroke", "red");
 
   svg.append("rect")
     .attr("x", x(24))
@@ -162,7 +169,8 @@ d3.csv("data/views_stats.csv", function(error, data) {
           .attr("font-size", 18)
           .attr("text-anchor", "end")
           .text(function(d) { return d; });
-
 });
 
 </script>
+
+</body>
